@@ -27,7 +27,7 @@ class MPIService
     public function __construct($settings)
     {
         if (!isset($settings['url']) || !filter_var($settings['url'], FILTER_VALIDATE_URL)) {
-            throw new MPIException('URL is required in order to instanciate the service');
+            throw new MPIException('URL is required in order to instantiate the service');
         }
 
         if (isset($settings['apiKey'])) {
