@@ -6,7 +6,7 @@ namespace PlacetoPay\MPI;
 
 use PlacetoPay\MPI\Clients\GuzzleMPIClient;
 use PlacetoPay\MPI\Contracts\MPIClient;
-use PlacetoPay\MPI\Exceptions\MPIException;
+use PlacetoPay\MPI\Contracts\MPIException;
 use PlacetoPay\MPI\Messages\LookUpResponse;
 use PlacetoPay\MPI\Messages\QueryResponse;
 
