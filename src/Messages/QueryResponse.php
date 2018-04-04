@@ -49,7 +49,7 @@ class QueryResponse extends MPIBaseMessage
      */
     public function validSignature()
     {
-        return $this->validSignature;
+        return $this->validSignature == 1;
     }
 
     /**
