@@ -84,6 +84,20 @@ class QueryResponse extends MPIBaseMessage
     }
 
     /**
+     * Returns this information as array to store it
+     */
+    public function toArray()
+    {
+        return [
+            'status' => $this->status,
+            'validSignature' => $this->validSignature,
+            'eci' => $this->eci,
+            'cavv' => $this->cavv,
+            'xid' => $this->xid,
+        ];
+    }
+
+    /**
      * @param $result
      * @return QueryResponse
      * @throws \PlacetoPay\MPI\Exceptions\ErrorResultMPI
