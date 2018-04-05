@@ -57,6 +57,7 @@ class MPIService
             'expiration_year' => $data['card']['expirationYear'],
             'expiration_month' => $data['card']['expirationMonth'],
             'amount' => $data['amount'],
+            'currency' => $data['currency'],
             'redirect_uri' => $data['redirectUrl'],
         ];
         if (isset($data['card']['installments'])) {

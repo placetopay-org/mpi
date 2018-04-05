@@ -9,7 +9,7 @@ composer require placetopay/mpi
 
 ## Usage
 
-Instanciate the object with the service
+Instantiate the object with the service
 
 ```
 $mpi = new \PlacetoPay\MPI\MPIService([
@@ -24,9 +24,9 @@ $response = $mpi->lookUp([
         'number' => '5476328554652171',
         'expirationYear' => '20',
         'expirationMonth' => '12',
-        'installments' => '1',
     ],
-    'amount' => 1200,
+    'amount' => 12000,
+    'currency' => 'COP',
     'redirectUrl' => 'https://dnetix.co/ping/3ds',
     // --- OPTIONAL ---
     'recurrence' => [

@@ -23,6 +23,7 @@ class LookUpProcessTest extends BaseTestCase
                 'expirationMonth' => '12',
             ],
             'amount' => 1200,
+            'currency' => 'COP',
             'redirectUrl' => 'https://dnetix.co/ping/3ds',
         ]);
 
@@ -56,6 +57,7 @@ class LookUpProcessTest extends BaseTestCase
                 'installments' => 3,
             ],
             'amount' => 1200,
+            'currency' => 'COP',
             'redirectUrl' => 'https://dnetix.co/ping/3ds',
         ]);
 
@@ -76,6 +78,7 @@ class LookUpProcessTest extends BaseTestCase
                 'expirationMonth' => '12',
             ],
             'amount' => 1200,
+            'currency' => 'COP',
             'redirectUrl' => 'https://dnetix.co/ping/3ds',
         ]);
 
@@ -95,6 +98,7 @@ class LookUpProcessTest extends BaseTestCase
                 'expirationMonth' => '12',
             ],
             'amount' => 1200,
+            'currency' => 'COP',
             'redirectUrl' => 'https://dnetix.co/ping/3ds',
         ]);
 
@@ -117,6 +121,7 @@ class LookUpProcessTest extends BaseTestCase
                 'expirationMonth' => '12',
             ],
             'amount' => 1200,
+            'currency' => 'COP',
             'redirectUrl' => 'https://dnetix.co/ping/3ds',
         ]);
 
@@ -134,6 +139,7 @@ class LookUpProcessTest extends BaseTestCase
                 'expirationMonth' => '12',
             ],
             'amount' => 1200,
+            'currency' => 'COP',
             'redirectUrl' => 'https://example.com/return',
         ]);
 
@@ -155,6 +161,7 @@ class LookUpProcessTest extends BaseTestCase
                 'expirationMonth' => '12',
             ],
             'amount' => 1200,
+            'currency' => 'COP',
             'redirectUrl' => 'https://other.com/return',
         ]);
 
