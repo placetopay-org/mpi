@@ -100,7 +100,6 @@ class QueryResponse extends MPIBaseMessage
     /**
      * @param $result
      * @return QueryResponse
-     * @throws \PlacetoPay\MPI\Exceptions\ErrorResultMPI
      */
     public static function loadFromResult($result)
     {
@@ -110,8 +109,8 @@ class QueryResponse extends MPIBaseMessage
             'status' => $result['authentication_status'],
             'validSignature' => $result['validated_signature'],
             'eci' => $result['eci'],
-            'cavv' => $result['cavv'],
-            'xid' => $result['xid'],
+            'cavv' => isset($result['cavv']) ? $result['cavv'] : null,
+            'xid' => isset($result['xid']) ? $result['xid'] : null,
         ];
 
         return new self($data);
