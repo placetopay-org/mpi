@@ -59,6 +59,16 @@ class LookUpResponse extends MPIBaseMessage
         return $this->eci;
     }
 
+    public function toArray()
+    {
+        return [
+            'enrolled' => $this->enrolled(),
+            'redirectUrl' => $this->processUrl(),
+            'identifier' => $this->identifier(),
+            'eci' => $this->eci(),
+        ];
+    }
+
     public static function loadFromResult($result)
     {
         parent::loadFromResult($result);
