@@ -19,4 +19,7 @@ abstract class MPIBaseMessage
         }
     }
 
+
+    public abstract function toArray();
+
 }
