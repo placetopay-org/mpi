@@ -53,12 +53,14 @@ class MPIService
         $url = $this->url() . '/api/lookup';
         $method = 'POST';
         $request = [
+            'locale' => isset($data['locale']) ? $data['locale'] : 'es',
             'pan' => $data['card']['number'],
             'expiration_year' => $data['card']['expirationYear'],
             'expiration_month' => $data['card']['expirationMonth'],
             'amount' => $data['amount'],
             'currency' => $data['currency'],
             'redirect_uri' => $data['redirectUrl'],
+            'disable_redirect' => isset($data['disableRedirect']) ? $data['disableRedirect'] : false,
         ];
         if (isset($data['card']['installments'])) {
             $request['installments'] = $data['card']['installments'];

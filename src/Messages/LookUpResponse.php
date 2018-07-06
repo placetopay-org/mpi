@@ -10,6 +10,10 @@ class LookUpResponse extends MPIBaseMessage
     protected $redirectUrl;
     protected $identifier;
     protected $eci;
+    /**
+     * @var array
+     */
+    protected $formData;
 
     public function __construct($data)
     {
@@ -17,6 +21,9 @@ class LookUpResponse extends MPIBaseMessage
         $this->redirectUrl = $data['redirectUrl'];
         $this->identifier = $data['identifier'];
         $this->eci = $data['eci'];
+        if (isset($data['formData'])) {
+            $this->formData = $data['formData'];
+        }
     }
 
     /**
@@ -59,6 +66,11 @@ class LookUpResponse extends MPIBaseMessage
         return $this->eci;
     }
 
+    public function formData()
+    {
+        return $this->formData;
+    }
+
     public function toArray()
     {
         return [
@@ -66,6 +78,7 @@ class LookUpResponse extends MPIBaseMessage
             'redirectUrl' => $this->processUrl(),
             'identifier' => $this->identifier(),
             'eci' => $this->eci(),
+            'formData' => $this->formData(),
         ];
     }
 
@@ -78,7 +91,17 @@ class LookUpResponse extends MPIBaseMessage
             'redirectUrl' => isset($result['redirect_url']) ? $result['redirect_url'] : null,
             'identifier' => isset($result['transaction_id']) ? $result['transaction_id'] : null,
             'eci' => isset($result['eci_flag']) ? $result['eci_flag'] : null,
+            'formData' => null,
         ];
+
+        if (isset($result['acs_url'])) {
+            $data['formData'] = [
+                'acsUrl' => $result['acs_url'],
+                'paReq' => $result['pa_req'],
+                'termUrl' => $result['term_url'],
+                'md' => isset($result['md']) ? $result['md'] : null,
+            ];
+        }
 
         return new self($data);
     }
