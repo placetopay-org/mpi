@@ -9,5 +9,4 @@ use PlacetoPay\MPI\Contracts\MPIException;
 
 class ErrorResultMPI extends MPIException
 {
-
 }

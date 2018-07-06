@@ -17,6 +17,7 @@ class MockClient implements MPIClient
      * @param $data
      * @param $headers
      * @return array
+     * @throws MPIException
      */
     public function execute($url, $method, $data, $headers)
     {
