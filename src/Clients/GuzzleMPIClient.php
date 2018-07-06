@@ -19,6 +19,7 @@ class GuzzleMPIClient implements MPIClient
      * @param $data
      * @param $headers
      * @return array
+     * @throws \Exception
      */
     public function execute($url, $method, $data, $headers)
     {
@@ -43,14 +44,13 @@ class GuzzleMPIClient implements MPIClient
                 throw new \Exception("No valid method for this request");
             }
 
-            return json_decode($response->getBody()->getContents(), true);
+            $response = $response->getBody()->getContents();
+            return json_decode($response, true);
 
         } catch (ClientException $e) {
             return json_decode($e->getResponse()->getBody()->getContents(), true);
         } catch (ServerException $e) {
             return json_decode($e->getResponse()->getBody()->getContents(), true);
-        } catch (\Exception $e) {
-            die($e->getMessage());
         }
     }
 
