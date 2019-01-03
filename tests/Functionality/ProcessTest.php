@@ -24,17 +24,10 @@ class ProcessTest extends BaseTestCase
             'amount' => 1200,
             'currency' => 'COP',
             'redirectUrl' => 'https://dnetix.co/ping/3ds',
+            'userAgent' => 'Testing',
         ]);
 
         var_dump($response);
     }
-
-//    public function testItObtainsAQuerySuccessfully()
-//    {
-//        $mpi = $this->create();
-//
-//        $response = $mpi->query(49);
-//        var_dump($response);
-//    }
 
 }

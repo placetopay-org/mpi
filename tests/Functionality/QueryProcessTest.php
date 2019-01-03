@@ -19,7 +19,6 @@ class QueryProcessTest extends BaseTestCase
         $response = $mpi->query(1);
 
         $this->assertTrue($response->isAuthenticated());
-        $this->assertEquals('Y', $response->authenticationStatus());
         $this->assertTrue($response->validSignature());
         $this->assertEquals('05', $response->eci());
         $this->assertEquals('AAACCZJiUGVlF4U5AmJQEwAAAAA=', $response->cavv());
@@ -33,7 +32,6 @@ class QueryProcessTest extends BaseTestCase
         $response = $mpi->query(2);
 
         $this->assertFalse($response->isAuthenticated());
-        $this->assertEquals('A', $response->authenticationStatus());
         $this->assertTrue($response->validSignature());
         $this->assertEquals('06', $response->eci());
         $this->assertEquals('CAACAlRGNFVVBEYZGUY0EwAAAAA=', $response->cavv());
@@ -47,7 +45,6 @@ class QueryProcessTest extends BaseTestCase
         $response = $mpi->query(3);
 
         $this->assertFalse($response->isAuthenticated());
-        $this->assertEquals('Y', $response->authenticationStatus());
         $this->assertFalse($response->validSignature());
         $this->assertEquals('05', $response->eci());
         $this->assertEquals('AAACA1aTWUhYcxeGg5NZEAAAEAA=', $response->cavv());
@@ -61,11 +58,12 @@ class QueryProcessTest extends BaseTestCase
         $response = $mpi->query(1);
 
         $this->assertEquals([
-            'status' => 'Y',
-            'validSignature' => 1,
+            'validSignature' => true,
             'eci' => '05',
             'cavv' => 'AAACCZJiUGVlF4U5AmJQEwAAAAA=',
             'xid' => 'Z8UuHYF8Epz46M8V/MkGJDl2Y5E=',
+            'enrolled' => 'Y',
+            'authenticated' => 'Y',
         ], $response->toArray());
     }
 

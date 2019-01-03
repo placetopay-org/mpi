@@ -49,7 +49,7 @@ class QueryResponse extends MPIBaseMessage
      */
     public function validSignature()
     {
-        return $this->validSignature == 1;
+        return $this->validSignature;
     }
 
     /**
@@ -109,7 +109,7 @@ class QueryResponse extends MPIBaseMessage
 
         $data = [
             'authenticated' => $result['authentication_status'],
-            'validSignature' => $result['validated_signature'],
+            'validSignature' => !!$result['validated_signature'],
             'eci' => $result['eci'],
             'cavv' => isset($result['cavv']) ? $result['cavv'] : null,
             'xid' => isset($result['xid']) ? $result['xid'] : null,
