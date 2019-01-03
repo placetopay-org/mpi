@@ -21,6 +21,7 @@
     }
   },
   "require": {
+    "ext-json": "*",
     "guzzlehttp/guzzle": ">=5.3"
   },
   "require-dev": {
