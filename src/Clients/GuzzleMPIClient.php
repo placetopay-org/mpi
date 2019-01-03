@@ -47,15 +47,14 @@ class GuzzleMPIClient implements MPIClient
                     }
                 }
             }
-
             $response = $response->getBody()->getContents();
-            return json_decode($response, true);
-
         } catch (ClientException $e) {
-            return json_decode($e->getResponse()->getBody()->getContents(), true);
+            $response = $e->getResponse()->getBody()->getContents();
         } catch (ServerException $e) {
-            return json_decode($e->getResponse()->getBody()->getContents(), true);
+            $response = $e->getResponse()->getBody()->getContents();
         }
+
+        return json_decode($response, true);
     }
 
 }
