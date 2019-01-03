@@ -56,7 +56,7 @@ class MPIService
      */
     public function lookUp($data)
     {
-        $url = $this->url() . '/api/lookup';
+        $url = $this->url('api/lookup');
         $method = 'POST';
 
         $this->addHeader('Authorization', 'Bearer ' . $this->apiKey);
@@ -92,7 +92,7 @@ class MPIService
      */
     public function query($id)
     {
-        $url = $this->url() . '/api/transactions/' . $id;
+        $url = $this->url('/api/transactions/' . $id);
         $method = 'GET';
 
         $this->addHeader('Authorization', 'Bearer ' . $this->apiKey);
@@ -112,9 +112,9 @@ class MPIService
         return $this;
     }
 
-    protected function url()
+    protected function url($endpoint = '')
     {
-        return $this->url;
+        return $this->url . $endpoint;
     }
 
     protected function client()
