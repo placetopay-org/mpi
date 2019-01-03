@@ -23,5 +23,5 @@ class LookUpResponseTest extends BaseTestCase
         $data = $this->unserialize('YTozOntzOjEyOiJlcnJvcl9udW1iZXIiO2k6MTAwMjtzOjE3OiJlcnJvcl9kZXNjcmlwdGlvbiI7czozNzoiSW52YWxpZCBhcmd1bWVudHMgdG8gaW5pdGlhdGUgcmVxdWVzdCI7czo2OiJlcnJvcnMiO2E6MTp7czozOiJwYW4iO2E6MTp7aTowO3M6NDk6IlRoZSBjYXJkIG51bWJlciBkb2Vzbid0IG1hdGNoIHRoZSBleHBlY3RlZCB2YWx1ZXMiO319fQ==');
         \PlacetoPay\MPI\Messages\LookUpResponse::loadFromResult($data);
     }
-    
+
 }
