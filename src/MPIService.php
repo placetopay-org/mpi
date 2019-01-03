@@ -12,12 +12,17 @@ use PlacetoPay\MPI\Messages\QueryResponse;
 
 class MPIService
 {
-    private $url;
-    private $apiKey;
+    protected $url;
+    protected $apiKey;
     /**
      * @var MPIClient
      */
-    private $client;
+    protected $client;
+
+    protected $headers = [
+        'Accept' => 'application/vnd.api.v1+json',
+        'Content-Type' => 'application/json',
+    ];
 
     /**
      * MPIService constructor.
@@ -47,11 +52,15 @@ class MPIService
      * Performs the query to know if the card can be authenticated
      * @param $data
      * @return LookUpResponse
+     * @throws Exceptions\ErrorResultMPI
      */
     public function lookUp($data)
     {
         $url = $this->url() . '/api/lookup';
         $method = 'POST';
+
+        $this->addHeader('Authorization', 'Bearer ' . $this->apiKey);
+
         $request = [
             'locale' => isset($data['locale']) ? $data['locale'] : 'es',
             'pan' => $data['card']['number'],
@@ -62,8 +71,13 @@ class MPIService
             'redirect_uri' => $data['redirectUrl'],
             'disable_redirect' => isset($data['disableRedirect']) ? $data['disableRedirect'] : false,
         ];
+
         if (isset($data['card']['installments'])) {
             $request['installments'] = $data['card']['installments'];
+        }
+
+        if (isset($data['userAgent'])) {
+            $this->addHeader('User-Agent', $data['userAgent']);
         }
 
         $response = $this->client()->execute($url, $method, $request, $this->headers());
@@ -80,6 +94,8 @@ class MPIService
     {
         $url = $this->url() . '/api/transactions/' . $id;
         $method = 'GET';
+
+        $this->addHeader('Authorization', 'Bearer ' . $this->apiKey);
 
         $response = $this->client()->execute($url, $method, [], $this->headers());
         return QueryResponse::loadFromResult($response);
@@ -106,13 +122,14 @@ class MPIService
         return $this->client;
     }
 
+    public function addHeader($key, $value)
+    {
+        $this->headers[$key] = $value;
+    }
+
     protected function headers()
     {
-        return [
-            'Accept' => 'application/vnd.api.v1+json',
-            'Content-Type' => 'application/json',
-            'Authorization' => 'Bearer ' . $this->apiKey,
-        ];
+        return $this->headers;
     }
 
 }
