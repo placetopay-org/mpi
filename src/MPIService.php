@@ -87,15 +87,20 @@ class MPIService
     /**
      * Check the status of the authentication
      * @param $id
+     * @param array $additional
      * @return QueryResponse
      * @throws Exceptions\ErrorResultMPI
      */
-    public function query($id)
+    public function query($id, $additional = [])
     {
         $url = $this->url('/api/transactions/' . $id);
         $method = 'GET';
 
         $this->addHeader('Authorization', 'Bearer ' . $this->apiKey);
+
+        if (isset($additional['userAgent'])) {
+            $this->addHeader('User-Agent', $additional['userAgent']);
+        }
 
         $response = $this->client()->execute($url, $method, [], $this->headers());
         return QueryResponse::loadFromResult($response);
