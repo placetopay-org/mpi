@@ -67,6 +67,7 @@ class MPIService
             'expiration_year' => $data['card']['expirationYear'],
             'expiration_month' => $data['card']['expirationMonth'],
             'amount' => $data['amount'],
+            'reference' => $data['reference'] ?? null,
             'currency' => $data['currency'],
             'redirect_uri' => $data['redirectUrl'],
             'disable_redirect' => isset($data['disableRedirect']) ? $data['disableRedirect'] : false,
