@@ -1,8 +1,6 @@
 <?php
 
-
 namespace PlacetoPay\MPI;
-
 
 use PlacetoPay\MPI\Clients\GuzzleMPIClient;
 use PlacetoPay\MPI\Contracts\MPIClient;
@@ -18,7 +16,6 @@ class MPIService
      * @var MPIClient
      */
     protected $client;
-
     protected $headers = [
         'Accept' => 'application/vnd.api.v1+json',
         'Content-Type' => 'application/json',
@@ -137,5 +134,4 @@ class MPIService
     {
         return $this->headers;
     }
-
 }

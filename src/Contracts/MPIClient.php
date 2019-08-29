@@ -1,12 +1,9 @@
 <?php
 
-
 namespace PlacetoPay\MPI\Contracts;
-
 
 interface MPIClient
 {
-
     /**
      * Performs a HTTP request and returns the information on array
      * @param $url
@@ -16,5 +13,4 @@ interface MPIClient
      * @return array
      */
     public function execute($url, $method, $data, $headers);
-
 }

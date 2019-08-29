@@ -1,8 +1,6 @@
 <?php
 
-
 namespace PlacetoPay\MPI\Messages;
-
 
 class LookUpResponse extends MPIBaseMessage
 {
@@ -105,5 +103,4 @@ class LookUpResponse extends MPIBaseMessage
 
         return new self($data);
     }
-
 }

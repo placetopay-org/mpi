@@ -1,8 +1,6 @@
 <?php
 
-
 namespace PlacetoPay\MPI\Messages;
-
 
 class QueryResponse extends MPIBaseMessage
 {
@@ -117,5 +115,4 @@ class QueryResponse extends MPIBaseMessage
 
         return new self($data);
     }
-
 }

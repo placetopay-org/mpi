@@ -1,8 +1,6 @@
 <?php
 
-
 namespace PlacetoPay\MPI\Clients;
-
 
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\ClientException;
@@ -11,7 +9,6 @@ use PlacetoPay\MPI\Contracts\MPIClient;
 
 class GuzzleMPIClient implements MPIClient
 {
-
     /**
      * Performs a HTTP request and returns the information on array
      * @param $url
@@ -56,5 +53,4 @@ class GuzzleMPIClient implements MPIClient
 
         return json_decode($response, true);
     }
-
 }
