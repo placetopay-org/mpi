@@ -7,6 +7,8 @@ use PlacetoPay\MPI\Contracts\MPIClient;
 use PlacetoPay\MPI\Contracts\MPIException;
 use PlacetoPay\MPI\Messages\LookUpResponse;
 use PlacetoPay\MPI\Messages\QueryResponse;
+use PlacetoPay\MPI\Messages\UpdateTransactionRequest;
+use PlacetoPay\MPI\Messages\UpdateTransactionResponse;
 
 class MPIService
 {
@@ -102,6 +104,28 @@ class MPIService
 
         $response = $this->client()->execute($url, $method, [], $this->headers());
         return QueryResponse::loadFromResult($response);
+    }
+
+    public function update($id, UpdateTransactionRequest $request): UpdateTransactionResponse
+    {
+        $url = $this->url('/api/transactions/' . $id);
+        $method = 'PATCH';
+
+        $this->addHeader('Authorization', 'Bearer ' . $this->apiKey);
+
+        $data = [
+            'payment' => [
+                'processor' => $request->processor(),
+                'authorization' => $request->authorization(),
+                'provider' => $request->provider(),
+                'base24' => $request->base24(),
+                'iso' => $request->iso(),
+            ],
+        ];
+
+        $response = $this->client()->execute($url, $method, $data, $this->headers());
+
+        return UpdateTransactionResponse::loadFromResult($response);
     }
 
     /**
