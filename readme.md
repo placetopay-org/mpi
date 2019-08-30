@@ -18,6 +18,7 @@ $mpi = new \PlacetoPay\MPI\MPIService([
 ]);
 ```
 
+## Lookup the card on the directories
 ```
 $response = $mpi->lookUp([
     'card' => [
@@ -34,4 +35,19 @@ $response = $mpi->lookUp([
         'dueDate' => '2020-01-01',
     ],
 ]);
+```
+
+## Query validation status
+```
+$response = $mpi->query(12345678);
+```
+
+## Update transaction status
+```
+$response = $mpi->update(12345678, new \PlacetoPay\MPI\Messages\UpdateTransactionRequest([
+    'provider' => 'PlacetoPay',
+    'processor' => 'CREDIBANCO',
+    'authorization' => '909823',
+    'iso' => '00'
+]));
 ```
