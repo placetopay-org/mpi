@@ -1,11 +1,10 @@
 <?php
 
-
 namespace PlacetoPay\MPI\Messages;
-
 
 class QueryResponse extends MPIBaseMessage
 {
+    protected $id;
     protected $authenticated;
     protected $validSignature;
     protected $eci;
@@ -14,6 +13,7 @@ class QueryResponse extends MPIBaseMessage
 
     public function __construct($data)
     {
+        $this->id = $data['id'] ?? null;
         $this->authenticated = $data['authenticated'];
         $this->validSignature = $data['validSignature'];
         $this->eci = $data['eci'];
@@ -89,6 +89,7 @@ class QueryResponse extends MPIBaseMessage
     public function toArray()
     {
         return [
+            'id' => $this->id(),
             'enrolled' => 'Y',
             'authenticated' => $this->authenticated(),
             'validSignature' => $this->validSignature,
@@ -100,14 +101,16 @@ class QueryResponse extends MPIBaseMessage
 
     /**
      * @param $result
+     * @param null $id
      * @return QueryResponse
      * @throws \PlacetoPay\MPI\Exceptions\ErrorResultMPI
      */
-    public static function loadFromResult($result)
+    public static function loadFromResult($result, $id = null)
     {
         parent::loadFromResult($result);
 
         $data = [
+            'id' => $id,
             'authenticated' => $result['authentication_status'],
             'validSignature' => !!$result['validated_signature'],
             'eci' => $result['eci'],
@@ -117,5 +120,4 @@ class QueryResponse extends MPIBaseMessage
 
         return new self($data);
     }
-
 }

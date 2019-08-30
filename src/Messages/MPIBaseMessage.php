@@ -1,14 +1,11 @@
 <?php
 
-
 namespace PlacetoPay\MPI\Messages;
-
 
 use PlacetoPay\MPI\Exceptions\ErrorResultMPI;
 
 abstract class MPIBaseMessage
 {
-
     /**
      * @param $result
      * @throws ErrorResultMPI
@@ -24,5 +21,4 @@ abstract class MPIBaseMessage
     }
 
     public abstract function toArray();
-
 }

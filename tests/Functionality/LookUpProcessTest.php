@@ -1,11 +1,15 @@
 <?php
 
+namespace PlacetoPay\MPI\Tests\Functionality;
+
+use PlacetoPay\MPI\MPIService;
+use PlacetoPay\MPI\Tests\BaseTestCase;
 
 class LookUpProcessTest extends BaseTestCase
 {
     public function create($overwrite = [])
     {
-        return new \PlacetoPay\MPI\MPIService(array_merge([
+        return new MPIService(array_merge([
             'url' => getenv('MPI_URL'),
             'apiKey' => getenv('MPI_API_KEY'),
             'client' => new \PlacetoPay\MPI\Clients\MockClient(),
@@ -167,5 +171,4 @@ class LookUpProcessTest extends BaseTestCase
 
         $this->assertFalse($response->canAuthenticate());
     }
-
 }

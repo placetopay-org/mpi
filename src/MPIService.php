@@ -1,14 +1,14 @@
 <?php
 
-
 namespace PlacetoPay\MPI;
-
 
 use PlacetoPay\MPI\Clients\GuzzleMPIClient;
 use PlacetoPay\MPI\Contracts\MPIClient;
 use PlacetoPay\MPI\Contracts\MPIException;
 use PlacetoPay\MPI\Messages\LookUpResponse;
 use PlacetoPay\MPI\Messages\QueryResponse;
+use PlacetoPay\MPI\Messages\UpdateTransactionRequest;
+use PlacetoPay\MPI\Messages\UpdateTransactionResponse;
 
 class MPIService
 {
@@ -18,7 +18,6 @@ class MPIService
      * @var MPIClient
      */
     protected $client;
-
     protected $headers = [
         'Accept' => 'application/vnd.api.v1+json',
         'Content-Type' => 'application/json',
@@ -104,7 +103,29 @@ class MPIService
         }
 
         $response = $this->client()->execute($url, $method, [], $this->headers());
-        return QueryResponse::loadFromResult($response);
+        return QueryResponse::loadFromResult($response, $id);
+    }
+
+    public function update($id, UpdateTransactionRequest $request): UpdateTransactionResponse
+    {
+        $url = $this->url('/api/transactions/' . $id);
+        $method = 'PATCH';
+
+        $this->addHeader('Authorization', 'Bearer ' . $this->apiKey);
+
+        $data = [
+            'payment' => [
+                'processor' => $request->processor(),
+                'authorization' => $request->authorization(),
+                'provider' => $request->provider(),
+                'base24' => $request->base24(),
+                'iso' => $request->iso(),
+            ],
+        ];
+
+        $response = $this->client()->execute($url, $method, $data, $this->headers());
+
+        return UpdateTransactionResponse::loadFromResult($response, $id);
     }
 
     /**
@@ -137,5 +158,4 @@ class MPIService
     {
         return $this->headers;
     }
-
 }
