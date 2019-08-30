@@ -103,7 +103,7 @@ class MPIService
         }
 
         $response = $this->client()->execute($url, $method, [], $this->headers());
-        return QueryResponse::loadFromResult($response);
+        return QueryResponse::loadFromResult($response, $id);
     }
 
     public function update($id, UpdateTransactionRequest $request): UpdateTransactionResponse
@@ -125,7 +125,7 @@ class MPIService
 
         $response = $this->client()->execute($url, $method, $data, $this->headers());
 
-        return UpdateTransactionResponse::loadFromResult($response);
+        return UpdateTransactionResponse::loadFromResult($response, $id);
     }
 
     /**
