@@ -14,7 +14,7 @@ class UpdateTransactionRequest
     {
         $this->processor = $data['processor'] ?? null;
         $this->authorization = $data['authorization'] ?? null;
-        $this->provider = $data['provider'] ?? null;
+        $this->provider = $data['provider'] ?? $this->provider;
         $this->base24 = $data['base24'] ?? null;
         $this->iso = $data['iso'] ?? null;
     }
