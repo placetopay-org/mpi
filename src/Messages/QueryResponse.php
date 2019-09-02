@@ -21,6 +21,11 @@ class QueryResponse extends MPIBaseMessage
         $this->xid = $data['xid'];
     }
 
+    public function id()
+    {
+        return $this->id;
+    }
+
     /**
      * Returns true if the authentication process has been successfully completed
      * @return bool
