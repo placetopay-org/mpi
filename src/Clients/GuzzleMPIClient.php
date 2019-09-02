@@ -20,37 +20,30 @@ class GuzzleMPIClient implements MPIClient
      */
     public function execute($url, $method, $data, $headers)
     {
-        try {
-            $client = new Client();
-            if ($method == 'POST') {
-                $response = $client->post($url, [
+        $client = new Client();
+        if (in_array($method, ['POST', 'PATCH'])) {
+            $response = $client->request($method, $url, [
+                'headers' => $headers,
+                'json' => $data,
+            ]);
+        } else {
+            if ($method == 'GET') {
+                $response = $client->get($url, [
                     'headers' => $headers,
                     'json' => $data,
                 ]);
             } else {
-                if ($method == 'GET') {
-                    $response = $client->get($url, [
+                if ($method == 'PUT') {
+                    $response = $client->put($url, [
                         'headers' => $headers,
                         'json' => $data,
                     ]);
                 } else {
-                    if ($method == 'PUT') {
-                        $response = $client->put($url, [
-                            'headers' => $headers,
-                            'json' => $data,
-                        ]);
-                    } else {
-                        throw new \Exception("No valid method for this request");
-                    }
+                    throw new \Exception("No valid method for this request");
                 }
             }
-            $response = $response->getBody()->getContents();
-        } catch (ClientException $e) {
-            $response = $e->getResponse()->getBody()->getContents();
-        } catch (ServerException $e) {
-            $response = $e->getResponse()->getBody()->getContents();
         }
-
+        $response = $response->getBody()->getContents();
         return json_decode($response, true);
     }
 }
