@@ -114,13 +114,13 @@ class MPIService
         $this->addHeader('Authorization', 'Bearer ' . $this->apiKey);
 
         $data = [
-            'payment' => [
+            'payment' => array_filter([
                 'processor' => $request->processor(),
                 'authorization' => $request->authorization(),
                 'provider' => $request->provider(),
                 'base24' => $request->base24(),
                 'iso' => $request->iso(),
-            ],
+            ]),
         ];
 
         $response = $this->client()->execute($url, $method, $data, $this->headers());
