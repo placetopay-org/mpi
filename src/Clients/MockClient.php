@@ -24,7 +24,7 @@ class MockClient implements MPIClient
             }
 
             switch ($data['pan']) {
-                case "4532840681197602":
+                case '4532840681197602':
                     if (isset($data['disable_redirect']) && $data['disable_redirect']) {
                         return [
                             'enrolled' => 'Y',
@@ -41,12 +41,12 @@ class MockClient implements MPIClient
                         'transaction_id' => 1,
                     ];
                     break;
-                case "4716036206946551":
+                case '4716036206946551':
                     if (!isset($data['installments']) || $data['installments'] > 36) {
                         throw new MPIException('Installments are not provided');
                     }
                     break;
-                case "5554575520765108":
+                case '5554575520765108':
                     if ($data['redirect_uri'] != 'https://example.com/return') {
                         throw new MPIException('Redirect URL does not match');
                     }
@@ -54,8 +54,8 @@ class MockClient implements MPIClient
                         'enrolled' => 'N',
                         'eci_flag' => '07',
                     ];
-                case "6011499026766178":
-                    if ($headers['Authorization'] != "Bearer VALID_ONE") {
+                case '6011499026766178':
+                    if ($headers['Authorization'] != 'Bearer VALID_ONE') {
                         throw new MPIException('Api Key is not VALID_ONE');
                     }
                     break;
@@ -65,42 +65,87 @@ class MockClient implements MPIClient
                 'eci_flag' => '07',
             ];
         } else {
-            if ($method != 'GET') {
-                throw new MPIException("Incorrect HTTP Method {$method} ON {$url}");
-            }
-
             $id = explode('/', $url);
             $id = end($id);
 
-            switch ($id) {
-                case 1:
-                    return [
-                        'authentication_status' => 'Y',
-                        'validated_signature' => '1',
-                        'eci' => '05',
-                        'cavv' => 'AAACCZJiUGVlF4U5AmJQEwAAAAA=',
-                        'xid' => 'Z8UuHYF8Epz46M8V/MkGJDl2Y5E=',
-                    ];
-                    break;
-                case 2:
-                    return [
-                        'authentication_status' => 'A',
-                        'validated_signature' => '1',
-                        'eci' => '06',
-                        'cavv' => 'CAACAlRGNFVVBEYZGUY0EwAAAAA=',
-                        'xid' => '0CI2blBv4uSnIqelFXJX0mV+fMg=',
-                    ];
-                    break;
-                case 3:
-                    return [
-                        'authentication_status' => 'Y',
-                        'validated_signature' => null,
-                        'eci' => '05',
-                        'cavv' => 'AAACA1aTWUhYcxeGg5NZEAAAEAA=',
-                        'xid' => 'UbRrlDARTXFT8GVALigF4MDyhkk=',
-                    ];
-                    break;
+            if ($method == 'GET') {
+                switch ($id) {
+                    case 1:
+                        return [
+                            'authentication_status' => 'Y',
+                            'validated_signature' => '1',
+                            'eci' => '05',
+                            'cavv' => 'AAACCZJiUGVlF4U5AmJQEwAAAAA=',
+                            'xid' => 'Z8UuHYF8Epz46M8V/MkGJDl2Y5E=',
+                        ];
+                        break;
+                    case 2:
+                        return [
+                            'authentication_status' => 'A',
+                            'validated_signature' => '1',
+                            'eci' => '06',
+                            'cavv' => 'CAACAlRGNFVVBEYZGUY0EwAAAAA=',
+                            'xid' => '0CI2blBv4uSnIqelFXJX0mV+fMg=',
+                        ];
+                        break;
+                    case 3:
+                        return [
+                            'authentication_status' => 'Y',
+                            'validated_signature' => null,
+                            'eci' => '05',
+                            'cavv' => 'AAACA1aTWUhYcxeGg5NZEAAAEAA=',
+                            'xid' => 'UbRrlDARTXFT8GVALigF4MDyhkk=',
+                        ];
+                        break;
+                }
+            } else if ($method == 'PATCH') {
+                return [
+                    'id' => $id,
+                    'reference' => 'Test reference',
+                    'created_at' => '2019-08-28 14:34:23',
+                    'merchant' => [
+                        'id' => 1,
+                        'name' => 'EGM Ingenería sin Fronteras',
+                        'brand' => 'PlacetoPay'
+                    ],
+                    'truncated_pan' => '401200******1112',
+                    'amount' => '75000.00',
+                    'amount_formatted' => '$750.00',
+                    'protocol' => '1.0.2',
+                    'currency' => [
+                        'currency' => 'US Dollar',
+                        'alphabetic_code' => 'USD',
+                        'numeric_code' => '840',
+                        'minor_unit' => 2
+                    ],
+                    'payment' => [
+                        'processor' => 'processorTest',
+                        'authorization' => 'autorizationCode',
+                        'provider' => 'Interdin',
+                        'base24' => 'xid',
+                        'iso' => null
+                    ],
+                    'verification_response' => [
+                        'status' => 'Y',
+                        'text' => 'Card enrolled'
+                    ],
+                    'authentication_response' => [
+                        'status' => 'Y',
+                        'text' => 'Full Authentication'
+                    ],
+                    'eci_response' => [
+                        'status' => 'success',
+                        'code' => '05',
+                        'text' => 'Eci => 05'
+                    ],
+                    'validated_signature' => true,
+                    'franchise' => [
+                        'brand' => 'visa'
+                    ]
+                ];
             }
+
+            throw new MPIException("Incorrect HTTP Method {$method} ON {$url}");
         }
     }
 }
