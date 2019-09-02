@@ -6,7 +6,7 @@ class UpdateTransactionRequest
 {
     protected $processor;
     protected $authorization;
-    protected $provider;
+    protected $provider = 'PlacetoPay';
     protected $base24;
     protected $iso;
 
