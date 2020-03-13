@@ -46,7 +46,8 @@ class LookUpProcessTest extends BaseTestCase
 
     public function testItInstantiateTheGuzzleLibrary()
     {
-        $this->create(['client' => null]);
+        $mpiInstance = $this->create(['client' => null]);
+        $this->assertInstanceOf(MPIService::class, $mpiInstance);
     }
 
     public function testItSendsTheInstallmentsCorrectly()
