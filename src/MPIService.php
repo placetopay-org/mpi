@@ -3,8 +3,10 @@
 namespace PlacetoPay\MPI;
 
 use PlacetoPay\MPI\Clients\GuzzleMPIClient;
+use PlacetoPay\MPI\Contracts\MPIFactory;
 use PlacetoPay\MPI\Contracts\MPIClient;
 use PlacetoPay\MPI\Contracts\MPIException;
+use PlacetoPay\MPI\Entities\Director;
 use PlacetoPay\MPI\Messages\LookUpResponse;
 use PlacetoPay\MPI\Messages\QueryResponse;
 use PlacetoPay\MPI\Messages\UpdateTransactionRequest;
@@ -14,6 +16,7 @@ class MPIService
 {
     protected $url;
     protected $apiKey;
+    protected $mpiVersion;
     /**
      * @var MPIClient
      */
@@ -38,6 +41,10 @@ class MPIService
             $this->apiKey = $settings['apiKey'];
         }
 
+        if (isset($settings['3dsVersion'])) {
+            $this->mpiVersion = $settings['3dsVersion'];
+        }
+
         if (isset($settings['client']) && $settings['client'] instanceof MPIClient) {
             $this->client = $settings['client'];
         } else {
@@ -60,21 +67,8 @@ class MPIService
 
         $this->addHeader('Authorization', 'Bearer ' . $this->apiKey);
 
-        $request = [
-            'locale' => isset($data['locale']) ? $data['locale'] : 'es',
-            'pan' => $data['card']['number'],
-            'expiration_year' => $data['card']['expirationYear'],
-            'expiration_month' => $data['card']['expirationMonth'],
-            'amount' => $data['amount'],
-            'reference' => $data['reference'] ?? null,
-            'currency' => $data['currency'],
-            'redirect_uri' => $data['redirectUrl'],
-            'disable_redirect' => isset($data['disableRedirect']) ? $data['disableRedirect'] : false,
-        ];
-
-        if (isset($data['card']['installments'])) {
-            $request['installments'] = $data['card']['installments'];
-        }
+        $version = new Director($data, $this->mpiVersion);
+        $request = $version->toArray();
 
         if (isset($data['userAgent'])) {
             $this->addHeader('User-Agent', $data['userAgent']);
