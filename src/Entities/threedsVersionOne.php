@@ -1,6 +1,5 @@
 <?php
 
-
 namespace PlacetoPay\MPI\Entities;
 
 use PlacetoPay\MPI\Contracts\MPIFactory;

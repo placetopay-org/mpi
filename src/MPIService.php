@@ -3,6 +3,7 @@
 namespace PlacetoPay\MPI;
 
 use PlacetoPay\MPI\Clients\GuzzleMPIClient;
+use PlacetoPay\MPI\Constants\Mpi;
 use PlacetoPay\MPI\Contracts\MPIFactory;
 use PlacetoPay\MPI\Contracts\MPIClient;
 use PlacetoPay\MPI\Contracts\MPIException;
@@ -43,6 +44,8 @@ class MPIService
 
         if (isset($settings['3dsVersion'])) {
             $this->mpiVersion = $settings['3dsVersion'];
+        } else {
+            $this->mpiVersion = Mpi::VERSION_ONE;
         }
 
         if (isset($settings['client']) && $settings['client'] instanceof MPIClient) {
@@ -62,7 +65,7 @@ class MPIService
      */
     public function lookUp($data)
     {
-        $url = $this->url('api/lookup');
+        $url = $this->url(Mpi::lookupEndPoint[$this->mpiVersion]);
         $method = 'POST';
 
         $this->addHeader('Authorization', 'Bearer ' . $this->apiKey);
@@ -87,7 +90,7 @@ class MPIService
      */
     public function query($id, $additional = [])
     {
-        $url = $this->url('/api/transactions/' . $id);
+        $url = $this->url(Mpi::queryEndPoint[$this->mpiVersion] . $id);
         $method = 'GET';
 
         $this->addHeader('Authorization', 'Bearer ' . $this->apiKey);

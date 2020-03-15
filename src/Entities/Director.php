@@ -2,7 +2,7 @@
 
 namespace PlacetoPay\MPI\Entities;
 
-use PlacetoPay\MPI\Constants\mpiVersions;
+use PlacetoPay\MPI\Constants\Mpi;
 use PlacetoPay\MPI\Contracts\MPIFactory;
 
 class Director
@@ -21,12 +21,17 @@ class Director
     public function resolveInstance($threedsVersion)
     {
         switch ($threedsVersion){
-            case mpiVersions::VERSION_TWO:
+            case Mpi::VERSION_TWO:
                 return threedsVersionTwo::class;
                 break;
             default:
                 return threedsVersionOne::class;
         }
+    }
+
+    public function queryEndPoint()
+    {
+        return $this->instance->queryEndPoint();
     }
 
     public function toArray()
