@@ -4,7 +4,7 @@
 namespace PlacetoPay\MPI\Contracts;
 
 
-interface MPIFactory
+interface Request
 {
     public function toArray(): array;
 }

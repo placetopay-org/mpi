@@ -1,17 +1,45 @@
 <?php
 
-namespace PlacetoPay\MPI\Entities;
+namespace PlacetoPay\MPI\Requests;
 
-use PlacetoPay\MPI\Contracts\MPIFactory;
+use PlacetoPay\MPI\Constants\MPI;
+use PlacetoPay\MPI\Contracts\Request;
 
-class threedsVersionTwo implements MPIFactory
+class LookUpVersionTwoRequest implements Request
 {
+    /**
+     * @var string
+     */
     private $accNumber;
+
+    /**
+     * @var string
+     */
     private $cardExpiryDate;
+
+    /**
+     * @var string
+     */
     private $purchaseAmount;
+
+    /**
+     * @var string
+     */
     private $purchaseCurrency;
+
+    /**
+     * @var string
+     */
     private $redirectURI;
+
+    /**
+     * @var string
+     */
     private $threeDSAuthenticationInd;
+
+    /**
+     * @var string
+     */
     private $reference;
 
     public function __construct($data)
@@ -36,5 +64,10 @@ class threedsVersionTwo implements MPIFactory
             'threeDSAuthenticationInd' => $this->threeDSAuthenticationInd,
             'reference' => $this->reference,
         ];
+    }
+
+    public function endpoint(): string
+    {
+        return MPI::LOOKUP_ENDPOINTS[MPI::VERSION_TWO];
     }
 }
