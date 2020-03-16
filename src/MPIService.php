@@ -3,11 +3,11 @@
 namespace PlacetoPay\MPI;
 
 use PlacetoPay\MPI\Clients\GuzzleMPIClient;
-use PlacetoPay\MPI\Constants\Mpi;
-use PlacetoPay\MPI\Contracts\MPIFactory;
+use PlacetoPay\MPI\Constants\MPI;
+use PlacetoPay\MPI\Contracts\Request;
 use PlacetoPay\MPI\Contracts\MPIClient;
 use PlacetoPay\MPI\Contracts\MPIException;
-use PlacetoPay\MPI\Entities\Director;
+use PlacetoPay\MPI\Entities\DirectorFactory;
 use PlacetoPay\MPI\Messages\LookUpResponse;
 use PlacetoPay\MPI\Messages\QueryResponse;
 use PlacetoPay\MPI\Messages\UpdateTransactionRequest;
@@ -17,7 +17,6 @@ class MPIService
 {
     protected $url;
     protected $apiKey;
-    protected $mpiVersion;
     /**
      * @var MPIClient
      */
@@ -26,6 +25,11 @@ class MPIService
         'Accept' => 'application/vnd.api.v1+json',
         'Content-Type' => 'application/json',
     ];
+
+    /**
+     * @var \PlacetoPay\MPI\Entities\Director
+     */
+    private $versionDirector;
 
     /**
      * MPIService constructor.
@@ -43,9 +47,9 @@ class MPIService
         }
 
         if (isset($settings['3dsVersion'])) {
-            $this->mpiVersion = $settings['3dsVersion'];
+            $this->versionDirector = DirectorFactory::create($settings['3dsVersion']);
         } else {
-            $this->mpiVersion = Mpi::VERSION_ONE;
+            $this->versionDirector = DirectorFactory::create(MPI::VERSION_ONE);
         }
 
         if (isset($settings['client']) && $settings['client'] instanceof MPIClient) {
@@ -65,13 +69,13 @@ class MPIService
      */
     public function lookUp($data)
     {
-        $url = $this->url(Mpi::lookupEndPoint[$this->mpiVersion]);
+        $url = $this->url($this->versionDirector->lookupEndpoint());
+
+        $request = $this->versionDirector->lookup($data)->toArray();
+
         $method = 'POST';
 
         $this->addHeader('Authorization', 'Bearer ' . $this->apiKey);
-
-        $version = new Director($data, $this->mpiVersion);
-        $request = $version->toArray();
 
         if (isset($data['userAgent'])) {
             $this->addHeader('User-Agent', $data['userAgent']);
@@ -90,7 +94,8 @@ class MPIService
      */
     public function query($id, $additional = [])
     {
-        $url = $this->url(Mpi::queryEndPoint[$this->mpiVersion] . $id);
+        $url = $this->url($this->versionDirector->queryEndpoint($id));
+
         $method = 'GET';
 
         $this->addHeader('Authorization', 'Bearer ' . $this->apiKey);

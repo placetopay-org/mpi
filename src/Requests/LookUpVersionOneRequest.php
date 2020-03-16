@@ -1,31 +1,65 @@
 <?php
 
-namespace PlacetoPay\MPI\Entities;
+namespace PlacetoPay\MPI\Requests;
 
-use PlacetoPay\MPI\Contracts\MPIFactory;
+use PlacetoPay\MPI\Constants\MPI;
+use PlacetoPay\MPI\Contracts\Request;
 
-class threedsVersionOne implements MPIFactory
+class LookUpVersionOneRequest implements Request
 {
     /**
      * @var string
      */
     private $locale;
+
+    /**
+     * @var string
+     */
     private $pan;
+
+    /**
+     * @var string
+     */
     private $expiration_year;
+
+    /**
+     * @var string
+     */
     private $expiration_month;
+
+    /**
+     * @var string
+     */
     private $amount;
+
+    /**
+     * @var string
+     */
     private $reference;
+
+    /**
+     * @var string
+     */
     private $currency;
+
+    /**
+     * @var string
+     */
     private $redirect_uri;
+
     /**
      * @var bool
      */
     private $disable_redirect;
+
+    /**
+     * @var string
+     */
     private $installments;
 
     public function __construct(array $data)
     {
-        $this->locale = isset($data['locale']) ? $data['locale'] : 'es';
+        $this->locale = isset($data['locale']) ? $data['locale'] : 'en';
         $this->pan = $data['card']['number'];
         $this->expiration_year = $data['card']['expirationYear'];
         $this->expiration_month = $data['card']['expirationMonth'];
