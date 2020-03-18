@@ -5,7 +5,7 @@ namespace PlacetoPay\MPI\Clients;
 use PlacetoPay\MPI\Contracts\MPIClient;
 use PlacetoPay\MPI\Contracts\MPIException;
 
-class MockClient implements MPIClient
+class MockClientVersionOne implements MPIClient
 {
     /**
      * Performs a HTTP request and returns the information on array
