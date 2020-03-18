@@ -8,7 +8,7 @@ use PlacetoPay\MPI\Contracts\Request;
 use PlacetoPay\MPI\Contracts\MPIClient;
 use PlacetoPay\MPI\Contracts\MPIException;
 use PlacetoPay\MPI\Entities\DirectorFactory;
-use PlacetoPay\MPI\Messages\LookUpResponse;
+use PlacetoPay\MPI\Messages\VersionOneLookUpResponse;
 use PlacetoPay\MPI\Messages\QueryResponse;
 use PlacetoPay\MPI\Messages\UpdateTransactionRequest;
 use PlacetoPay\MPI\Messages\UpdateTransactionResponse;
@@ -64,7 +64,7 @@ class MPIService
     /**
      * Performs the query to know if the card can be authenticated
      * @param $data
-     * @return LookUpResponse
+     * @return VersionOneLookUpResponse
      * @throws Exceptions\ErrorResultMPI
      */
     public function lookUp($data)
@@ -82,7 +82,7 @@ class MPIService
         }
 
         $response = $this->client()->execute($url, $method, $request, $this->headers());
-        return LookUpResponse::loadFromResult($response);
+        return $this->versionDirector->lookupResponse($response);
     }
 
     /**

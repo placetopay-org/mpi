@@ -3,6 +3,7 @@
 namespace PlacetoPay\MPI\Entities;
 
 use PlacetoPay\MPI\Constants\MPI;
+use PlacetoPay\MPI\Messages\VersionOneLookUpResponse;
 
 class DirectorFactory
 {

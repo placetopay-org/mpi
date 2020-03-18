@@ -7,4 +7,5 @@ interface Director
     public function lookup(array $data);
     public function lookupEndpoint();
     public function queryEndpoint($id);
+    public function lookupResponse(array $data);
 }

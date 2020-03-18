@@ -8,12 +8,12 @@ interface MPI
     const VERSION_TWO = 'V2';
 
     const LOOKUP_ENDPOINTS = [
-      self::VERSION_ONE => 'api/lookup',
-      self::VERSION_TWO => ''
+      self::VERSION_ONE => '/api/lookup',
+      self::VERSION_TWO => '/api/threeds/v2/sessions'
     ];
 
     const QUERY_ENDPOINTS = [
         self::VERSION_ONE => '/api/transactions/',
-        self::VERSION_TWO => ''
+        self::VERSION_TWO => '/api/threeds/v2/transactions/'
     ];
 }
