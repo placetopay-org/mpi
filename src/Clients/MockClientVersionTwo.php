@@ -4,6 +4,7 @@
 namespace PlacetoPay\MPI\Clients;
 
 
+use PlacetoPay\MPI\Constants\MPI;
 use PlacetoPay\MPI\Contracts\MPIClient;
 use PlacetoPay\MPI\Contracts\MPIException;
 
@@ -16,48 +17,63 @@ class MockClientVersionTwo implements MPIClient
      */
     public function execute($url, $method, $data, $headers)
     {
-        if (strpos($url, 'lookup') !== false) {
-            if ($method != 'POST') {
-                throw new MPIException("Incorrect HTTP Method {$method} ON {$url}");
-            }
+        if (strpos($url, MPI::LOOKUP_ENDPOINTS[MPI::VERSION_TWO]) !== false) {
+            return $this->lookup($url, $method, $data);
+        } else {
+            return $this->query($url, $method);
+        }
+    }
 
-            switch ($data['pan']) {
-                case '4532840681197602':
-                    if (isset($data['disable_redirect']) && $data['disable_redirect']) {
-                        return [
-                            'enrolled' => 'Y',
-                            'acs_url' => 'https://pit.3dsecure.net/VbVTestSuiteService/pit1/acsService/paReq?summary=N2Y0YmRjYTUtYzc1Mi00YjQ3LTkwMTQtNGY1ZTkwOGUyMWJh',
-                            'pa_req' => 'eJxtUttOwzAM/ZWp722aNqxlcjN1bFwkdhF0EjxmqWGF9ULasu3vSUrHQOIhio9zdGwfB8aHfDf4RFVnZRFZ1HGtARayTLPiNbLWybUdWmMOyVYhTh9Rtgo5zLGuxSsOsjSyVvEDfuAmCBgb+jbzmG8Hrsfs4ZBubOGHwhteyiB9SS0OHZdDX43rYo4H5AS1rJJbUTQchPyY3C04u2AhvQTSQ8hR3U15tRMSm7ISRyDfGShEjnx1H1/NkuUqfgbSJUCWbdGoI6eBC+QEoFU7vm2aqh4Rst/vnbOeI8ucADEEIOduVq2Jai14yFI+n8b7/84ykREQw4BUNMg9l4ZuQN2BG46oP/IZkC4PIjedcKoJuq0eQWWKxH+efqdAO6/0Yo48ZGaYEwI8VGWBmqGd/IkhxVrqGfrrPMDVrTFXNtq02+w6mbWz95u39ZPy6aLNJ/NlHEXG7o5gpDNtmEfpt7YBQIwE6TdJ+p+goz8/5AsrpcPw',
-                            'term_url' => 'https://dev.placetopay.ec/3ds-mpi/authenticate/callback/2602bdabcfdc271ae812c1ea73ae6d974272eaaca8958cfab36a173de77d7fa9',
-                            'md' => '',
-                            'transaction_id' => 1
-                        ];
-                    }
+    /**
+     * @param $url
+     * @param $method
+     * @param $data
+     * @return array
+     * @throws MPIException
+     */
+    public function lookup($url, $method, $data): array
+    {
+        if ($method != 'POST') {
+            throw new MPIException("Incorrect HTTP Method {$method} ON {$url}");
+        }
+
+        switch ($data['acctNumber']) {
+            case '4012000000001006':
+                return [
+                    'sessionToken' => rand(60, 60),
+                    'redirectURL' => 'https://dnetix.co/ping/3ds',
+                    'transactionID' => 1,
+                ];
+                break;
+        }
+    }
+
+    /**
+     * @param $url
+     * @param $method
+     * @return array|mixed
+     * @throws MPIException
+     */
+    public function query($url, $method)
+    {
+        $id = explode('/', $url);
+        $id = end($id);
+
+        if ($method == 'GET') {
+            switch ($id) {
+                case 1:
                     return [
-                        'enrolled' => 'Y',
-                        'redirect_url' => 'https://dnetix.co/ping/3ds',
-                        'transaction_id' => 1,
+                        'transStatus' => 'Y',
+                        'eci' => '07',
+                        'acsTransID' => '37a7b6e0-fd58-4e38-98de-79c70c526a47',
+                        'dsTransID' => 'de018c08-bd14-426a-9d52-46500a17091e=',
+                        'threeDSServerTransID' => 'eadd3a60-b870-41d0-977f-921b3dbe6323/MkGJDl2Y5E=',
+                        'authenticationValue' => 'AAABBZEEBgAAAAAAAAQGAAAAAAA='
                     ];
-                    break;
-                case '4716036206946551':
-                    if (!isset($data['installments']) || $data['installments'] > 36) {
-                        throw new MPIException('Installments are not provided');
-                    }
-                    break;
-                case '5554575520765108':
-                    if ($data['redirect_uri'] != 'https://example.com/return') {
-                        throw new MPIException('Redirect URL does not match');
-                    }
-                    return [
-                        'enrolled' => 'N',
-                        'eci_flag' => '07',
-                    ];
-                case '6011499026766178':
-                    if ($headers['Authorization'] != 'Bearer VALID_ONE') {
-                        throw new MPIException('Api Key is not VALID_ONE');
-                    }
                     break;
             }
         }
+
+        throw new MPIException("Incorrect HTTP Method {$method} ON {$url}");
     }
 }

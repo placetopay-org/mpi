@@ -11,7 +11,6 @@ class VersionTwoLookupResponse extends MPIBaseMessage
 
     public function __construct($data)
     {
-
         $this->sessionToken = $data['sessionToken'];
         $this->redirectUrl = $data['redirectURL'];
         $this->transactionId = $data['transactionID'];
@@ -23,7 +22,7 @@ class VersionTwoLookupResponse extends MPIBaseMessage
 
         $data = [
             'sessionToken' => $result['sessionToken'],
-            'redirectUrl' => isset($result['redirectUrl']) ? $result['redirectUrl'] : null,
+            'redirectURL' => isset($result['redirectURL']) ? $result['redirectURL'] : null,
             'transactionID' => isset($result['transactionID']) ? $result['transactionID'] : null
         ];
 
