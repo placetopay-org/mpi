@@ -9,7 +9,7 @@ use PlacetoPay\MPI\Contracts\MPIClient;
 use PlacetoPay\MPI\Contracts\MPIException;
 use PlacetoPay\MPI\Entities\DirectorFactory;
 use PlacetoPay\MPI\Messages\VersionOneLookUpResponse;
-use PlacetoPay\MPI\Messages\QueryResponse;
+use PlacetoPay\MPI\Messages\VersionOneQueryResponse;
 use PlacetoPay\MPI\Messages\UpdateTransactionRequest;
 use PlacetoPay\MPI\Messages\UpdateTransactionResponse;
 
@@ -89,7 +89,7 @@ class MPIService
      * Check the status of the authentication
      * @param $id
      * @param array $additional
-     * @return QueryResponse
+     * @return VersionOneQueryResponse
      * @throws Exceptions\ErrorResultMPI
      */
     public function query($id, $additional = [])
@@ -105,7 +105,9 @@ class MPIService
         }
 
         $response = $this->client()->execute($url, $method, [], $this->headers());
-        return QueryResponse::loadFromResult($response, $id);
+
+        $this->versionDirector->queryResponse($response, $id);
+        return VersionOneQueryResponse::loadFromResult($response, $id);
     }
 
     public function update($id, UpdateTransactionRequest $request): UpdateTransactionResponse

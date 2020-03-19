@@ -6,6 +6,7 @@ namespace PlacetoPay\MPI\Entities;
 
 use PlacetoPay\MPI\Constants\MPI;
 use PlacetoPay\MPI\Messages\VersionOneLookUpResponse;
+use PlacetoPay\MPI\Messages\VersionOneQueryResponse;
 use PlacetoPay\MPI\Requests\LookUpVersionOneRequest;
 
 class VersionOneDirector implements Director
@@ -28,5 +29,10 @@ class VersionOneDirector implements Director
     public function lookupResponse(array $data)
     {
         return VersionOneLookUpResponse::loadFromResult($data);
+    }
+
+    public function queryResponse(array $data, $id)
+    {
+        return VersionOneQueryResponse::loadFromResult($data, $id);
     }
 }
