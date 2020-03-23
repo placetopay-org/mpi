@@ -2,6 +2,7 @@
 
 namespace PlacetoPay\MPI\Tests\Functionality;
 
+use PlacetoPay\MPI\Constants\MPI;
 use PlacetoPay\MPI\MPIService;
 use PlacetoPay\MPI\Tests\BaseTestCase;
 
@@ -68,6 +69,21 @@ class QueryProcessTest extends BaseTestCase
             'xid' => 'Z8UuHYF8Epz46M8V/MkGJDl2Y5E=',
             'enrolled' => 'Y',
             'authenticated' => 'Y',
+            'id' => 1
         ], $response->toArray());
+    }
+
+    public function testItObtainsQueryVersionTwoSuccessfully()
+    {
+        $mpi = $this->create([
+            '3dsVersion' => MPI::VERSION_TWO,
+            'client' => new \PlacetoPay\MPI\Clients\MockClientVersionTwo(),
+        ]);
+
+        $response = $mpi->query(1);
+
+        $this->assertTrue($response->isAuthenticated());
+        $this->assertEquals('AAABBZEEBgAAAAAAAAQGAAAAAAA=', $response->validSignature());
+        $this->assertEquals('07', $response->eci());
     }
 }

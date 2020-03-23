@@ -95,7 +95,6 @@ class MPIService
     public function query($id, $additional = [])
     {
         $url = $this->url($this->versionDirector->queryEndpoint($id));
-
         $method = 'GET';
 
         $this->addHeader('Authorization', 'Bearer ' . $this->apiKey);
@@ -105,9 +104,7 @@ class MPIService
         }
 
         $response = $this->client()->execute($url, $method, [], $this->headers());
-
-        $this->versionDirector->queryResponse($response, $id);
-        return VersionOneQueryResponse::loadFromResult($response, $id);
+        return $this->versionDirector->queryResponse($response, $id);
     }
 
     public function update($id, UpdateTransactionRequest $request): UpdateTransactionResponse
