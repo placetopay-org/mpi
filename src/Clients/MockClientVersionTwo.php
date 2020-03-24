@@ -7,6 +7,7 @@ namespace PlacetoPay\MPI\Clients;
 use PlacetoPay\MPI\Constants\MPI;
 use PlacetoPay\MPI\Contracts\MPIClient;
 use PlacetoPay\MPI\Contracts\MPIException;
+use PlacetoPay\MPI\Exceptions\ErrorResultMPI;
 
 class MockClientVersionTwo implements MPIClient
 {
@@ -44,6 +45,18 @@ class MockClientVersionTwo implements MPIClient
                     'redirectURL' => 'https://dnetix.co/ping/3ds',
                     'transactionID' => 1,
                 ];
+                break;
+            case '4111111111111':
+                $response = [
+                        "error_number" => 1011,
+                        "error_description" =>  "Invalid arguments to initiate the authentication request",
+                        "errors" => [
+                            "acctNumber"=> [
+                                "The card number doesn't pass validation"
+                            ]
+                        ]
+                ];
+                throw new ErrorResultMPI($response['error_description'], $response['error_number']);
                 break;
         }
     }

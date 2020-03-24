@@ -3,6 +3,7 @@
 namespace PlacetoPay\MPI\Tests\Functionality;
 
 use PlacetoPay\MPI\Constants\MPI;
+use PlacetoPay\MPI\Exceptions\ErrorResultMPI;
 use PlacetoPay\MPI\Messages\VersionTwoLookupResponse;
 use PlacetoPay\MPI\MPIService;
 use PlacetoPay\MPI\Tests\BaseTestCase;
@@ -196,5 +197,25 @@ class LookUpProcessTest extends BaseTestCase
         $this->assertInstanceOf(VersionTwoLookupResponse::class, $response);
         $this->assertTrue($response->canAuthenticate());
         $this->assertEquals('https://dnetix.co/ping/3ds', $response->processUrl());
+    }
+
+    public function testThrowExceptionItInvalidResponse()
+    {
+        $mpi = $this->create([
+            '3dsVersion' => MPI::VERSION_TWO,
+            'client' => new \PlacetoPay\MPI\Clients\MockClientVersionTwo(),
+        ]);
+
+        $this->expectException(ErrorResultMPI::class);
+        $mpi->lookUp([
+            'card' => [
+                'number' => '4111111111111',
+                'expirationYear' => '20',
+                'expirationMonth' => '12',
+            ],
+            'amount' => 1200,
+            'currency' => 'COP',
+            'redirectUrl' => 'https://dnetix.co/ping/3ds',
+        ]);
     }
 }
