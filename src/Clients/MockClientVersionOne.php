@@ -56,7 +56,9 @@ class MockClientVersionOne implements MPIClient
                     ];
                 case '6011499026766178':
                     if ($headers['Authorization'] != 'Bearer VALID_ONE') {
-                        throw new MPIException('Api Key is not VALID_ONE');
+                        return [
+                            'message' => 'Unauthenticated'
+                        ];
                     }
                     break;
             }

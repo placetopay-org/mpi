@@ -47,7 +47,7 @@ class MockClientVersionTwo implements MPIClient
                 ];
                 break;
             case '4111111111111':
-                $response = [
+                return [
                         "error_number" => 1011,
                         "error_description" =>  "Invalid arguments to initiate the authentication request",
                         "errors" => [
@@ -56,7 +56,6 @@ class MockClientVersionTwo implements MPIClient
                             ]
                         ]
                 ];
-                throw new ErrorResultMPI($response['error_description'], $response['error_number']);
                 break;
         }
     }

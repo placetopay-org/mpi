@@ -20,7 +20,7 @@ class GuzzleMPIClient implements MPIClient
      */
     public function execute($url, $method, $data, $headers)
     {
-        $client = new Client();
+        $client = new Client(['http_errors' => false]);
         if (in_array($method, ['POST', 'PATCH'])) {
             $response = $client->request($method, $url, [
                 'headers' => $headers,
