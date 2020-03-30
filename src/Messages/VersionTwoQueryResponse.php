@@ -6,34 +6,34 @@ class VersionTwoQueryResponse extends MPIBaseMessage
 {
 
     private $id;
-    private $authenticationValue;
-    private $validSignature;
+    private $transStatus;
     private $eci;
     private $acsTransId;
     private $dsTransID;
     private $threeDSServerTransId;
+    private $authenticationValue;
 
     public function __construct(array $data)
     {
         $this->id = $data['id'];
-        $this->authenticationValue = $data['authenticationValue'];
-        $this->validSignature = $data['validSignature'];
+        $this->transStatus = $data['transStatus'];
         $this->eci = $data['eci'];
         $this->acsTransId = $data['acsTransId'];
         $this->dsTransID = $data['dsTransID'];
         $this->threeDSServerTransId = $data['threeDSServerTransId'];
+        $this->authenticationValue = $data['authenticationValue'];
     }
 
     public static function loadFromResult($result, $id = null)
     {
         $data = [
             'id' => $id,
-            'authenticationValue' => $result['transStatus'],
-            'validSignature' => $result['authenticationValue'],
+            'transStatus' => $result['transStatus'],
             'eci' => $result['eci'],
             'acsTransId' => $result['acsTransID'],
             'dsTransID' => $result['dsTransID'],
             'threeDSServerTransId' => $result['threeDSServerTransID'],
+            'authenticationValue' => $result['authenticationValue'],
         ];
 
         return new self($data);
@@ -61,7 +61,7 @@ class VersionTwoQueryResponse extends MPIBaseMessage
      */
     public function isAuthenticated()
     {
-        return $this->authenticated() == 'Y' && $this->validSignature();
+        return $this->authenticated() == 'Y' && $this->authenticationValue();
     }
 
     /**
@@ -74,7 +74,7 @@ class VersionTwoQueryResponse extends MPIBaseMessage
      */
     public function authenticated()
     {
-        return $this->authenticationValue;
+        return $this->transStatus;
     }
 
     /**
@@ -94,8 +94,8 @@ class VersionTwoQueryResponse extends MPIBaseMessage
      * Return true if the signature for the ACS response has been validated
      * @return bool
      */
-    public function validSignature()
+    public function authenticationValue()
     {
-        return $this->validSignature;
+        return $this->authenticationValue;
     }
 }
