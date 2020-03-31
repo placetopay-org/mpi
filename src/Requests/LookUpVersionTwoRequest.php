@@ -45,12 +45,28 @@ class LookUpVersionTwoRequest implements Request
     public function __construct($data)
     {
         $this->accNumber = $data['card']['number'];
-        $this->cardExpiryDate = $data['card']['expirationYear'] . $data['card']['expirationMonth'];
+        $this->cardExpiryDate = $this->expirationYearShort($data['card']['expirationYear']) . $data['card']['expirationMonth'];
         $this->purchaseAmount = $data['amount'];
         $this->purchaseCurrency = $data['currency'];
         $this->redirectURI = $data['redirectUrl'];
         $this->threeDSAuthenticationInd = '01'; //Validate this
         $this->reference = $data['reference'] ?? null;
+    }
+
+    /**
+     * Returns the expiration year always with YY format
+     * @param String $expirationYear
+     * @return string
+     */
+    public function expirationYearShort(String $expirationYear)
+    {
+        if (!$expirationYear) {
+            return null;
+        }
+        if (mb_strlen($expirationYear) == 4) {
+            $expirationYear = substr($expirationYear, 2, 2);
+        }
+        return $expirationYear;
     }
 
     public function toArray(): array 
