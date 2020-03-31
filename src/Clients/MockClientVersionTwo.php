@@ -83,6 +83,12 @@ class MockClientVersionTwo implements MPIClient
                         'authenticationValue' => 'AAABBZEEBgAAAAAAAAQGAAAAAAA='
                     ];
                     break;
+                case 2:
+                    return [
+                        "transStatus" => "U",
+                        "eci" => "07",
+                        "threeDSServerTransID" => "545ff18b-b90c-4afb-be4f-f087e47af8ea"
+                    ];
             }
         }
 

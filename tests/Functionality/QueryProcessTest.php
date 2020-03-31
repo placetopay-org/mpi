@@ -83,7 +83,20 @@ class QueryProcessTest extends BaseTestCase
         $response = $mpi->query(1);
 
         $this->assertTrue($response->isAuthenticated());
-        $this->assertEquals('AAABBZEEBgAAAAAAAAQGAAAAAAA=', $response->validSignature());
+        $this->assertEquals('AAABBZEEBgAAAAAAAAQGAAAAAAA=', $response->authenticationValue());
         $this->assertEquals('07', $response->eci());
+    }
+
+    public function testItDoesAuthenticateOnTreeDSServer()
+    {
+        $mpi = $this->create([
+            '3dsVersion' => MPI::VERSION_TWO,
+            'client' => new \PlacetoPay\MPI\Clients\MockClientVersionTwo(),
+        ]);
+
+        $response = $mpi->query(2);
+
+        $this->assertFalse($response->isAuthenticated());
+        $this->assertEquals('U', $response->authenticated());
     }
 }
