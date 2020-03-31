@@ -18,10 +18,10 @@ class VersionTwoQueryResponse extends MPIBaseMessage
         $this->id = $data['id'];
         $this->transStatus = $data['transStatus'];
         $this->eci = $data['eci'];
-        $this->acsTransId = $data['acsTransId'];
-        $this->dsTransID = $data['dsTransID'];
-        $this->threeDSServerTransId = $data['threeDSServerTransId'];
-        $this->authenticationValue = $data['authenticationValue'];
+        $this->acsTransId = $data['acsTransId'] ?? null;
+        $this->dsTransID = $data['dsTransID' ?? null];
+        $this->threeDSServerTransId = $data['threeDSServerTransId'] ?? null;
+        $this->authenticationValue = $data['authenticationValue'] ?? null;
     }
 
     public static function loadFromResult($result, $id = null)
@@ -30,10 +30,10 @@ class VersionTwoQueryResponse extends MPIBaseMessage
             'id' => $id,
             'transStatus' => $result['transStatus'],
             'eci' => $result['eci'],
-            'acsTransId' => $result['acsTransID'],
-            'dsTransID' => $result['dsTransID'],
-            'threeDSServerTransId' => $result['threeDSServerTransID'],
-            'authenticationValue' => $result['authenticationValue'],
+            'acsTransId' => $result['acsTransID'] ?? null,
+            'dsTransID' => $result['dsTransID'] ?? null,
+            'threeDSServerTransId' => $result['threeDSServerTransID'] ?? null,
+            'authenticationValue' => $result['authenticationValue'] ?? null,
         ];
 
         return new self($data);
@@ -97,5 +97,10 @@ class VersionTwoQueryResponse extends MPIBaseMessage
     public function authenticationValue()
     {
         return $this->authenticationValue;
+    }
+
+    public function acsTransId()
+    {
+        return $this->acsTransId;
     }
 }
