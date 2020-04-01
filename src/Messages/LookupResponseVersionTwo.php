@@ -2,7 +2,7 @@
 
 namespace PlacetoPay\MPI\Messages;
 
-class VersionTwoLookupResponse extends MPIBaseMessage
+class LookupResponseVersionTwo extends MPIBaseMessage
 {
 
     private $redirectUrl;

@@ -7,7 +7,6 @@ namespace PlacetoPay\MPI\Clients;
 use PlacetoPay\MPI\Constants\MPI;
 use PlacetoPay\MPI\Contracts\MPIClient;
 use PlacetoPay\MPI\Contracts\MPIException;
-use PlacetoPay\MPI\Exceptions\ErrorResultMPI;
 
 class MockClientVersionTwo implements MPIClient
 {

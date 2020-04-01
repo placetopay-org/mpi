@@ -2,7 +2,7 @@
 
 namespace PlacetoPay\MPI\Entities;
 
-interface Director
+interface MpiContract
 {
     public function lookup(array $data);
     public function lookupEndpoint();

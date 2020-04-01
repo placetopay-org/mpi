@@ -2,7 +2,7 @@
 
 namespace PlacetoPay\MPI\Messages;
 
-class VersionOneQueryResponse extends MPIBaseMessage
+class QueryResponseVersionOne extends MPIBaseMessage
 {
     protected $id;
     protected $authenticated;
@@ -107,7 +107,7 @@ class VersionOneQueryResponse extends MPIBaseMessage
     /**
      * @param $result
      * @param null $id
-     * @return VersionOneQueryResponse
+     * @return QueryResponseVersionOne
      * @throws \PlacetoPay\MPI\Exceptions\ErrorResultMPI
      */
     public static function loadFromResult($result, $id = null)

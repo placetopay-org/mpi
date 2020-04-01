@@ -2,7 +2,7 @@
 
 namespace PlacetoPay\MPI\Messages;
 
-class VersionTwoQueryResponse extends MPIBaseMessage
+class QueryResponseVersionTwo extends MPIBaseMessage
 {
 
     private $id;

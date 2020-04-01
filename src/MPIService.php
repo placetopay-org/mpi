@@ -7,9 +7,9 @@ use PlacetoPay\MPI\Constants\MPI;
 use PlacetoPay\MPI\Contracts\Request;
 use PlacetoPay\MPI\Contracts\MPIClient;
 use PlacetoPay\MPI\Contracts\MPIException;
-use PlacetoPay\MPI\Entities\DirectorFactory;
-use PlacetoPay\MPI\Messages\VersionOneLookUpResponse;
-use PlacetoPay\MPI\Messages\VersionOneQueryResponse;
+use PlacetoPay\MPI\Entities\MpiManager;
+use PlacetoPay\MPI\Messages\LookUpResponseVersionOne;
+use PlacetoPay\MPI\Messages\QueryResponseVersionOne;
 use PlacetoPay\MPI\Messages\UpdateTransactionRequest;
 use PlacetoPay\MPI\Messages\UpdateTransactionResponse;
 
@@ -27,7 +27,7 @@ class MPIService
     ];
 
     /**
-     * @var \PlacetoPay\MPI\Entities\Director
+     * @var \PlacetoPay\MPI\Entities\MpiContract
      */
     private $versionDirector;
 
@@ -47,9 +47,9 @@ class MPIService
         }
 
         if (isset($settings['3dsVersion'])) {
-            $this->versionDirector = DirectorFactory::create($settings['3dsVersion']);
+            $this->versionDirector = MpiManager::create($settings['3dsVersion']);
         } else {
-            $this->versionDirector = DirectorFactory::create(MPI::VERSION_ONE);
+            $this->versionDirector = MpiManager::create(MPI::VERSION_ONE);
         }
 
         if (isset($settings['client']) && $settings['client'] instanceof MPIClient) {
@@ -64,7 +64,7 @@ class MPIService
     /**
      * Performs the query to know if the card can be authenticated
      * @param $data
-     * @return VersionOneLookUpResponse
+     * @return LookUpResponseVersionOne
      * @throws \Exception
      */
     public function lookUp($data)
@@ -89,7 +89,7 @@ class MPIService
      * Check the status of the authentication
      * @param $id
      * @param array $additional
-     * @return VersionOneQueryResponse
+     * @return QueryResponseVersionOne
      * @throws \Exception
      */
     public function query($id, $additional = [])

@@ -4,7 +4,7 @@ namespace PlacetoPay\MPI\Tests\Functionality;
 
 use PlacetoPay\MPI\Constants\MPI;
 use PlacetoPay\MPI\Exceptions\ErrorResultMPI;
-use PlacetoPay\MPI\Messages\VersionTwoLookupResponse;
+use PlacetoPay\MPI\Messages\LookupResponseVersionTwo;
 use PlacetoPay\MPI\MPIService;
 use PlacetoPay\MPI\Tests\BaseTestCase;
 
@@ -194,7 +194,7 @@ class LookUpProcessTest extends BaseTestCase
             'redirectUrl' => 'https://dnetix.co/ping/3ds',
         ]);
 
-        $this->assertInstanceOf(VersionTwoLookupResponse::class, $response);
+        $this->assertInstanceOf(LookupResponseVersionTwo::class, $response);
         $this->assertTrue($response->canAuthenticate());
         $this->assertEquals('https://dnetix.co/ping/3ds', $response->processUrl());
     }

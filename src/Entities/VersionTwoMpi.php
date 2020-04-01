@@ -5,12 +5,11 @@ namespace PlacetoPay\MPI\Entities;
 
 
 use PlacetoPay\MPI\Constants\MPI;
-use PlacetoPay\MPI\Messages\VersionOneQueryResponse;
-use PlacetoPay\MPI\Messages\VersionTwoLookupResponse;
-use PlacetoPay\MPI\Messages\VersionTwoQueryResponse;
+use PlacetoPay\MPI\Messages\LookupResponseVersionTwo;
+use PlacetoPay\MPI\Messages\QueryResponseVersionTwo;
 use PlacetoPay\MPI\Requests\LookUpVersionTwoRequest;
 
-class VersionTwoDirector implements Director
+class VersionTwoMpi implements MpiContract
 {
     public function lookup(array $data)
     {
@@ -29,11 +28,11 @@ class VersionTwoDirector implements Director
 
     public function lookupResponse(array $data)
     {
-       return VersionTwoLookupResponse::loadFromResult($data);
+       return LookupResponseVersionTwo::loadFromResult($data);
     }
 
     public function queryResponse(array $data, $id)
     {
-        return VersionTwoQueryResponse::loadFromResult($data, $id);
+        return QueryResponseVersionTwo::loadFromResult($data, $id);
     }
 }
