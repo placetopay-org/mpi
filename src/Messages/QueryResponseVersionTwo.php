@@ -12,6 +12,7 @@ class QueryResponseVersionTwo extends MPIBaseMessage
     private $dsTransID;
     private $threeDSServerTransId;
     private $authenticationValue;
+    private $transStatusReason;
 
     public function __construct(array $data)
     {
@@ -22,6 +23,7 @@ class QueryResponseVersionTwo extends MPIBaseMessage
         $this->dsTransID = $data['dsTransID' ?? null];
         $this->threeDSServerTransId = $data['threeDSServerTransId'] ?? null;
         $this->authenticationValue = $data['authenticationValue'] ?? null;
+        $this->transStatusReason = $data['transStatusReason'] ?? null;
     }
 
     public static function loadFromResult($result, $id = null)
@@ -34,6 +36,7 @@ class QueryResponseVersionTwo extends MPIBaseMessage
             'dsTransID' => $result['dsTransID'] ?? null,
             'threeDSServerTransId' => $result['threeDSServerTransID'] ?? null,
             'authenticationValue' => $result['authenticationValue'] ?? null,
+            'transStatusReason' => $result['transStatusReason'] ?? null,
         ];
 
         return new self($data);
@@ -45,8 +48,15 @@ class QueryResponseVersionTwo extends MPIBaseMessage
             'id' => $this->id(),
             'enrolled' => 'Y',
             'authenticated' => $this->authenticated(),
+            'validSignature' => '',
             'eci' => $this->eci(),
-            'acsTransId' => $this->acsTransId(),
+            'xid' => $this->dsTransID(),
+            'cavv' => $this->authenticationValue(),
+            'extra' => [
+                'transStatusReason' => $this->reasonCode(),
+                'acsTransId' => $this->acsTransId(),
+                'threeDSServerTransID' => $this->threeDsServerTransId()
+            ],
         ];
     }
 
@@ -102,5 +112,20 @@ class QueryResponseVersionTwo extends MPIBaseMessage
     public function acsTransId()
     {
         return $this->acsTransId;
+    }
+
+    public function dsTransID()
+    {
+        return $this->dsTransID;
+    }
+
+    public function reasonCode()
+    {
+        return$this->transStatusReason;
+    }
+
+    public function threeDsServerTransId()
+    {
+        return $this->threeDSServerTransId;
     }
 }

@@ -82,6 +82,12 @@ class QueryProcessTest extends BaseTestCase
 
         $response = $mpi->query(1);
 
+        $this->assertArrayHasKey('authenticated', $response->toArray());
+        $this->assertArrayHasKey('eci', $response->toArray());
+        $this->assertArrayHasKey('xid', $response->toArray());
+        $this->assertArrayHasKey('cavv', $response->toArray());
+        $this->assertArrayHasKey('extra', $response->toArray());
+
         $this->assertTrue($response->isAuthenticated());
         $this->assertEquals('AAABBZEEBgAAAAAAAAQGAAAAAAA=', $response->authenticationValue());
         $this->assertEquals('07', $response->eci());
