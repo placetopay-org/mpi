@@ -16,4 +16,14 @@ interface MPI
         self::VERSION_ONE => '/api/transactions/',
         self::VERSION_TWO => '/api/threeds/v2/transactions/'
     ];
+
+
+    const PAYMENT_TX_CODE = '01';
+    const RECURRING_TX_CODE = '02';
+    const INSTALLMENT_TX_CODE = '03';
+
+    const THREEDS_AUTH_IND = [
+        self::RECURRING_TX_CODE,
+        self::INSTALLMENT_TX_CODE
+    ];
 }

@@ -3,6 +3,7 @@
 namespace PlacetoPay\MPI\Requests;
 
 use PlacetoPay\MPI\Constants\MPI;
+use PlacetoPay\MPI\Contracts\MPIException;
 use PlacetoPay\MPI\Contracts\Request;
 
 class LookUpVersionTwoRequest implements Request
@@ -35,12 +36,27 @@ class LookUpVersionTwoRequest implements Request
     /**
      * @var string
      */
-    private $threeDSAuthenticationInd;
+    private $reference;
 
     /**
      * @var string
      */
-    private $reference;
+    private $threeDSAuthenticationInd;
+
+    /**
+     * @var string|null
+     */
+    private $purchaseInstallData;
+
+    /**
+     * @var string|null
+     */
+    private $recurringFrequency;
+
+    /**
+     * @var string|null
+     */
+    private $recurringExpiry;
 
     public function __construct($data)
     {
@@ -49,8 +65,14 @@ class LookUpVersionTwoRequest implements Request
         $this->purchaseAmount = $data['amount'];
         $this->purchaseCurrency = $data['currency'];
         $this->redirectURI = $data['redirectUrl'];
-        $this->threeDSAuthenticationInd = '01'; //Validate this
         $this->reference = $data['reference'] ?? null;
+        $this->threeDSAuthenticationInd = $data['threeDSAuthenticationInd'] ?? null;
+
+        $this->threeDSAuthValidation($data);
+
+        $this->purchaseInstallData = $data['purchaseInstalData'] ?? null;
+        $this->recurringFrequency = $data['recurringFrequency'] ?? null;
+        $this->recurringExpiry = $data['recurringExpiry'] ?? null;
     }
 
     /**
@@ -86,4 +108,27 @@ class LookUpVersionTwoRequest implements Request
     {
         return MPI::LOOKUP_ENDPOINTS[MPI::VERSION_TWO];
     }
+
+    /**
+     * @param $data
+     * @throws MPIException
+     */
+    protected function threeDSAuthValidation($data)
+    {
+        if (in_array($this->threeDSAuthenticationInd, MPI::THREEDS_AUTH_IND)) {
+            if ( ! isset($data['recurringFrequency'])) {
+                throw new MPIException("The recurring frequency field is required when three d s authentication ind is {$this->threeDSAuthenticationInd}.");
+            }
+
+            if ( ! isset($data['recurringExpiry'])) {
+                throw new MPIException("The recurring expiry field is required when three d s authentication ind is {$this->threeDSAuthenticationInd}.");
+            }
+
+            if ($this->threeDSAuthenticationInd == '03' && ! isset($data['recurringFrequency'])) {
+                throw new MPIException("The purchase instal data field is required when three d s authentication ind is {$this->threeDSAuthenticationInd}.");
+            }
+        }
+    }
+
+
 }
