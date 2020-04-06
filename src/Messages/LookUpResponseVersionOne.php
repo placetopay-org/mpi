@@ -2,6 +2,8 @@
 
 namespace PlacetoPay\MPI\Messages;
 
+use PlacetoPay\MPI\Constants\MPI;
+
 class LookUpResponseVersionOne extends MPIBaseMessage
 {
     protected $enrolled;
@@ -72,6 +74,7 @@ class LookUpResponseVersionOne extends MPIBaseMessage
     public function toArray()
     {
         return [
+            'threeDSVersion' => MPI::VERSION_ONE,
             'enrolled' => $this->enrolled(),
             'redirectUrl' => $this->processUrl(),
             'identifier' => $this->identifier(),

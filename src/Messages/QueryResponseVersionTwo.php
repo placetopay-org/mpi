@@ -2,6 +2,8 @@
 
 namespace PlacetoPay\MPI\Messages;
 
+use PlacetoPay\MPI\Constants\MPI;
+
 class QueryResponseVersionTwo extends MPIBaseMessage
 {
 
@@ -52,6 +54,7 @@ class QueryResponseVersionTwo extends MPIBaseMessage
             'eci' => $this->eci(),
             'xid' => $this->dsTransID(),
             'cavv' => $this->authenticationValue(),
+            'threeDSVersion' => MPI::VERSION_TWO,
             'extra' => [
                 'transStatusReason' => $this->reasonCode(),
                 'acsTransId' => $this->acsTransId(),

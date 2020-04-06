@@ -2,6 +2,8 @@
 
 namespace PlacetoPay\MPI\Messages;
 
+use PlacetoPay\MPI\Constants\MPI;
+
 class QueryResponseVersionOne extends MPIBaseMessage
 {
     protected $id;
@@ -101,6 +103,7 @@ class QueryResponseVersionOne extends MPIBaseMessage
             'eci' => $this->eci(),
             'cavv' => $this->cavv(),
             'xid' => $this->xid(),
+            'threeDSVersion' => MPI::VERSION_ONE,
         ];
     }
 
