@@ -19,7 +19,7 @@ class MockClientVersionOne implements MPIClient
     public function execute($url, $method, $data, $headers)
     {
         if (strpos($url, 'lookup') !== false) {
-            return $this->loockup($url, $method, $data, $headers);
+            return $this->lookup($url, $method, $data, $headers);
         } else {
             $id = explode('/', $url);
             $id = end($id);
@@ -42,7 +42,7 @@ class MockClientVersionOne implements MPIClient
      * @return array
      * @throws MPIException
      */
-    public function loockup($url, $method, $data, $headers): array
+    public function lookup($url, $method, $data, $headers): array
     {
         if ($method != 'POST') {
             throw new MPIException("Incorrect HTTP Method {$method} ON {$url}");

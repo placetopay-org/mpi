@@ -8,7 +8,7 @@ use PlacetoPay\MPI\Contracts\Request;
 use PlacetoPay\MPI\Contracts\MPIClient;
 use PlacetoPay\MPI\Contracts\MPIException;
 use PlacetoPay\MPI\Entities\MpiManager;
-use PlacetoPay\MPI\Messages\LookUpResponseVersionOne;
+use PlacetoPay\MPI\Messages\LookupResponseVersionOne;
 use PlacetoPay\MPI\Messages\QueryResponseVersionOne;
 use PlacetoPay\MPI\Messages\UpdateTransactionRequest;
 use PlacetoPay\MPI\Messages\UpdateTransactionResponse;
@@ -29,7 +29,7 @@ class MPIService
     /**
      * @var \PlacetoPay\MPI\Entities\MpiContract
      */
-    private $versionDirector;
+    private $mpiManager;
 
     /**
      * MPIService constructor.
@@ -47,9 +47,9 @@ class MPIService
         }
 
         if (isset($settings['3dsVersion'])) {
-            $this->versionDirector = MpiManager::create($settings['3dsVersion']);
+            $this->mpiManager = MpiManager::create($settings['3dsVersion']);
         } else {
-            $this->versionDirector = MpiManager::create(MPI::VERSION_ONE);
+            $this->mpiManager = MpiManager::create(MPI::VERSION_ONE);
         }
 
         if (isset($settings['client']) && $settings['client'] instanceof MPIClient) {
@@ -64,14 +64,14 @@ class MPIService
     /**
      * Performs the query to know if the card can be authenticated
      * @param $data
-     * @return LookUpResponseVersionOne
+     * @return LookupResponseVersionOne
      * @throws \Exception
      */
     public function lookUp($data)
     {
-        $url = $this->url($this->versionDirector->lookupEndpoint());
+        $url = $this->url($this->mpiManager->lookupEndpoint());
 
-        $request = $this->versionDirector->lookup($data)->toArray();
+        $request = $this->mpiManager->lookup($data)->toArray();
 
         $method = 'POST';
 
@@ -82,7 +82,8 @@ class MPIService
         }
 
         $response = $this->client()->execute($url, $method, $request, $this->headers());
-        return $this->versionDirector->lookupResponse($response);
+
+        return $this->mpiManager->lookupResponse($response);
     }
 
     /**
@@ -94,7 +95,7 @@ class MPIService
      */
     public function query($id, $additional = [])
     {
-        $url = $this->url($this->versionDirector->queryEndpoint($id));
+        $url = $this->url($this->mpiManager->queryEndpoint($id));
         $method = 'GET';
 
         $this->addHeader('Authorization', 'Bearer ' . $this->apiKey);
@@ -104,7 +105,7 @@ class MPIService
         }
 
         $response = $this->client()->execute($url, $method, [], $this->headers());
-        return $this->versionDirector->queryResponse($response, $id);
+        return $this->mpiManager->queryResponse($response, $id);
     }
 
     public function update($id, UpdateTransactionRequest $request): UpdateTransactionResponse

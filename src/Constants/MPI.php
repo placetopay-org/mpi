@@ -18,12 +18,12 @@ interface MPI
     ];
 
 
-    const PAYMENT_TX_CODE = '01';
-    const RECURRING_TX_CODE = '02';
-    const INSTALLMENT_TX_CODE = '03';
+    const PAYMENT_TRANSACTION_CODE = '01';
+    const RECURRING_TRANSACTION_CODE = '02';
+    const INSTALLMENT_TRANSACTION_CODE = '03';
 
-    const THREEDS_AUTH_IND = [
-        self::RECURRING_TX_CODE,
-        self::INSTALLMENT_TX_CODE
+    const THREEDS_AUTH_INDICATOR = [
+        self::RECURRING_TRANSACTION_CODE,
+        self::INSTALLMENT_TRANSACTION_CODE
     ];
 }

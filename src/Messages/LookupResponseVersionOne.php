@@ -4,7 +4,7 @@ namespace PlacetoPay\MPI\Messages;
 
 use PlacetoPay\MPI\Constants\MPI;
 
-class LookUpResponseVersionOne extends MPIBaseMessage
+class LookupResponseVersionOne extends MPIBaseMessage
 {
     protected $enrolled;
     protected $redirectUrl;

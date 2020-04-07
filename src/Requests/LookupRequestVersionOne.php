@@ -5,7 +5,7 @@ namespace PlacetoPay\MPI\Requests;
 use PlacetoPay\MPI\Constants\MPI;
 use PlacetoPay\MPI\Contracts\Request;
 
-class LookUpVersionOneRequest implements Request
+class LookupRequestVersionOne implements Request
 {
     /**
      * @var string

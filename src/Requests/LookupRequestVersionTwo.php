@@ -6,7 +6,7 @@ use PlacetoPay\MPI\Constants\MPI;
 use PlacetoPay\MPI\Contracts\MPIException;
 use PlacetoPay\MPI\Contracts\Request;
 
-class LookUpVersionTwoRequest implements Request
+class LookupRequestVersionTwo implements Request
 {
     /**
      * @var string
@@ -115,7 +115,7 @@ class LookUpVersionTwoRequest implements Request
      */
     protected function threeDSAuthValidation($data)
     {
-        if (in_array($this->threeDSAuthenticationInd, MPI::THREEDS_AUTH_IND)) {
+        if (in_array($this->threeDSAuthenticationInd, MPI::THREEDS_AUTH_INDICATOR)) {
             if ( ! isset($data['recurringFrequency'])) {
                 throw new MPIException("The recurring frequency field is required when three d s authentication ind is {$this->threeDSAuthenticationInd}.");
             }

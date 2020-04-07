@@ -69,7 +69,8 @@ class QueryProcessTest extends BaseTestCase
             'xid' => 'Z8UuHYF8Epz46M8V/MkGJDl2Y5E=',
             'enrolled' => 'Y',
             'authenticated' => 'Y',
-            'id' => 1
+            'threeDSVersion' => MPI::VERSION_ONE,
+            'id' => 1,
         ], $response->toArray());
     }
 

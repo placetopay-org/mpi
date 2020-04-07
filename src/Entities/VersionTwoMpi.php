@@ -7,13 +7,18 @@ namespace PlacetoPay\MPI\Entities;
 use PlacetoPay\MPI\Constants\MPI;
 use PlacetoPay\MPI\Messages\LookupResponseVersionTwo;
 use PlacetoPay\MPI\Messages\QueryResponseVersionTwo;
-use PlacetoPay\MPI\Requests\LookUpVersionTwoRequest;
+use PlacetoPay\MPI\Requests\LookupRequestVersionTwo;
 
 class VersionTwoMpi implements MpiContract
 {
     public function lookup(array $data)
     {
-        return new LookUpVersionTwoRequest($data);
+        return new LookupRequestVersionTwo($data);
+    }
+
+    public function lookupResponse(array $data)
+    {
+        return LookupResponseVersionTwo::loadFromResult($data);
     }
 
     public function lookupEndpoint()
@@ -24,11 +29,6 @@ class VersionTwoMpi implements MpiContract
     public function queryEndpoint($id)
     {
         return MPI::QUERY_ENDPOINTS[MPI::VERSION_TWO].$id;
-    }
-
-    public function lookupResponse(array $data)
-    {
-       return LookupResponseVersionTwo::loadFromResult($data);
     }
 
     public function queryResponse(array $data, $id)
