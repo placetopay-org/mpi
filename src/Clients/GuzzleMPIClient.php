@@ -11,7 +11,7 @@ use PlacetoPay\MPI\Exceptions\ServiceException;
 class GuzzleMPIClient implements MPIClient
 {
     /**
-     * Performs a HTTP request and returns the information on array
+     * Performs a HTTP request and returns the information on array.
      * @param $url
      * @param $method
      * @param $data
@@ -41,7 +41,7 @@ class GuzzleMPIClient implements MPIClient
                             'json' => $data,
                         ]);
                     } else {
-                        throw new \Exception("No valid method for this request");
+                        throw new \Exception('No valid method for this request');
                     }
                 }
             }

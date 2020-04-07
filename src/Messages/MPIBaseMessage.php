@@ -20,5 +20,5 @@ abstract class MPIBaseMessage
         }
     }
 
-    public abstract function toArray();
+    abstract public function toArray();
 }

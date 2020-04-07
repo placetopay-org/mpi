@@ -64,7 +64,7 @@ class LookUpProcessTest extends BaseTestCase
             'redirectUrl' => 'https://dnetix.co/ping/3ds',
         ]);
 
-        $this->assertFalse($response->canAuthenticate(), "Card is not registered");
+        $this->assertFalse($response->canAuthenticate(), 'Card is not registered');
     }
 
     public function testItValidatesTheInstallmentsCorrectly()
@@ -83,7 +83,7 @@ class LookUpProcessTest extends BaseTestCase
             'redirectUrl' => 'https://dnetix.co/ping/3ds',
         ]);
 
-        $this->assertFalse($response->canAuthenticate(), "Card is not registered");
+        $this->assertFalse($response->canAuthenticate(), 'Card is not registered');
     }
 
     public function testItChangesTheApiKeyOnDemand()

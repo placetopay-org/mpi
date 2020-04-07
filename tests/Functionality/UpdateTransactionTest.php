@@ -24,7 +24,7 @@ class UpdateTransactionTest extends BaseTestCase
             'authorization' => '000000',
             'iso' => '05',
         ]));
-        
+
         $this->assertEquals(75000, $result->amount());
     }
 }

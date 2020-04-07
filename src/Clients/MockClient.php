@@ -8,7 +8,7 @@ use PlacetoPay\MPI\Contracts\MPIException;
 class MockClient implements MPIClient
 {
     /**
-     * Performs a HTTP request and returns the information on array
+     * Performs a HTTP request and returns the information on array.
      * @param $url
      * @param $method
      * @param $data
@@ -32,7 +32,7 @@ class MockClient implements MPIClient
                             'pa_req' => 'eJxtUttOwzAM/ZWp722aNqxlcjN1bFwkdhF0EjxmqWGF9ULasu3vSUrHQOIhio9zdGwfB8aHfDf4RFVnZRFZ1HGtARayTLPiNbLWybUdWmMOyVYhTh9Rtgo5zLGuxSsOsjSyVvEDfuAmCBgb+jbzmG8Hrsfs4ZBubOGHwhteyiB9SS0OHZdDX43rYo4H5AS1rJJbUTQchPyY3C04u2AhvQTSQ8hR3U15tRMSm7ISRyDfGShEjnx1H1/NkuUqfgbSJUCWbdGoI6eBC+QEoFU7vm2aqh4Rst/vnbOeI8ucADEEIOduVq2Jai14yFI+n8b7/84ykREQw4BUNMg9l4ZuQN2BG46oP/IZkC4PIjedcKoJuq0eQWWKxH+efqdAO6/0Yo48ZGaYEwI8VGWBmqGd/IkhxVrqGfrrPMDVrTFXNtq02+w6mbWz95u39ZPy6aLNJ/NlHEXG7o5gpDNtmEfpt7YBQIwE6TdJ+p+goz8/5AsrpcPw',
                             'term_url' => $data['redirect_uri'],
                             'md' => '',
-                            'transaction_id' => $data['expiration_month'] == '02' ? 2 : 1
+                            'transaction_id' => $data['expiration_month'] == '02' ? 2 : 1,
                         ];
                     }
                     return [
@@ -98,7 +98,7 @@ class MockClient implements MPIClient
                         ];
                         break;
                 }
-            } else if ($method == 'PATCH') {
+            } elseif ($method == 'PATCH') {
                 return [
                     'id' => $id,
                     'reference' => 'Test reference',
@@ -106,7 +106,7 @@ class MockClient implements MPIClient
                     'merchant' => [
                         'id' => 1,
                         'name' => 'EGM Ingenería sin Fronteras',
-                        'brand' => 'PlacetoPay'
+                        'brand' => 'PlacetoPay',
                     ],
                     'truncated_pan' => '401200******1112',
                     'amount' => '75000.00',
@@ -116,32 +116,32 @@ class MockClient implements MPIClient
                         'currency' => 'US Dollar',
                         'alphabetic_code' => 'USD',
                         'numeric_code' => '840',
-                        'minor_unit' => 2
+                        'minor_unit' => 2,
                     ],
                     'payment' => [
                         'processor' => 'processorTest',
                         'authorization' => 'autorizationCode',
                         'provider' => 'Interdin',
                         'base24' => 'xid',
-                        'iso' => null
+                        'iso' => null,
                     ],
                     'verification_response' => [
                         'status' => 'Y',
-                        'text' => 'Card enrolled'
+                        'text' => 'Card enrolled',
                     ],
                     'authentication_response' => [
                         'status' => 'Y',
-                        'text' => 'Full Authentication'
+                        'text' => 'Full Authentication',
                     ],
                     'eci_response' => [
                         'status' => 'success',
                         'code' => '05',
-                        'text' => 'Eci => 05'
+                        'text' => 'Eci => 05',
                     ],
                     'validated_signature' => true,
                     'franchise' => [
-                        'brand' => 'visa'
-                    ]
+                        'brand' => 'visa',
+                    ],
                 ];
             }
 
