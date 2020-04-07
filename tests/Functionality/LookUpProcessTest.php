@@ -36,17 +36,16 @@ class LookUpProcessTest extends BaseTestCase
         $this->assertEquals('https://dnetix.co/ping/3ds', $response->processUrl());
     }
 
-    /**
-     * @expectedException \PlacetoPay\MPI\Contracts\MPIException
-     */
     public function testItFailsIfNotURLProvided()
     {
+        $this->expectException(\PlacetoPay\MPI\Contracts\MPIException::class);
         $this->create(['url' => null]);
     }
 
     public function testItInstantiateTheGuzzleLibrary()
     {
-        $this->create(['client' => null]);
+        $mpi = $this->create(['client' => null]);
+        $this->assertNotNull($mpi);
     }
 
     public function testItSendsTheInstallmentsCorrectly()
@@ -68,11 +67,9 @@ class LookUpProcessTest extends BaseTestCase
         $this->assertFalse($response->canAuthenticate(), "Card is not registered");
     }
 
-    /**
-     * @expectedException \PlacetoPay\MPI\Contracts\MPIException
-     */
     public function testItValidatesTheInstallmentsCorrectly()
     {
+        $this->expectException(\PlacetoPay\MPI\Contracts\MPIException::class);
         $mpi = $this->create();
 
         $response = $mpi->lookUp([
@@ -109,11 +106,9 @@ class LookUpProcessTest extends BaseTestCase
         $this->assertFalse($response->canAuthenticate());
     }
 
-    /**
-     * @expectedException \PlacetoPay\MPI\Contracts\MPIException
-     */
     public function testItChangesTheApiKeyOnDemandInvalid()
     {
+        $this->expectException(\PlacetoPay\MPI\Contracts\MPIException::class);
         $mpi = $this->create();
 
         $mpi->setApiKey('INVALID_ONE');
@@ -151,11 +146,9 @@ class LookUpProcessTest extends BaseTestCase
         $this->assertEquals('07', $response->eci());
     }
 
-    /**
-     * @expectedException \PlacetoPay\MPI\Contracts\MPIException
-     */
     public function testItValidatesCorrectlyTheRedirectUrl()
     {
+        $this->expectException(\PlacetoPay\MPI\Contracts\MPIException::class);
         $mpi = $this->create();
 
         $response = $mpi->lookUp([

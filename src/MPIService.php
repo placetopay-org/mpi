@@ -55,7 +55,7 @@ class MPIService
      */
     public function lookUp($data)
     {
-        $url = $this->url('api/lookup');
+        $url = $this->url('/api/lookup');
         $method = 'POST';
 
         $this->addHeader('Authorization', 'Bearer ' . $this->apiKey);
