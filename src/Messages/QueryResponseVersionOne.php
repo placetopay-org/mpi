@@ -29,7 +29,7 @@ class QueryResponseVersionOne extends MPIBaseMessage
     }
 
     /**
-     * Returns true if the authentication process has been successfully completed
+     * Returns true if the authentication process has been successfully completed.
      * @return bool
      */
     public function isAuthenticated()
@@ -42,7 +42,7 @@ class QueryResponseVersionOne extends MPIBaseMessage
      *  “Y” - Successful Authentication
      *  “A” - Successful Attempt
      *  “N” - Failed Authentication
-     *  “U” - Unable to Authenticate
+     *  “U” - Unable to Authenticate.
      * @return string
      */
     public function authenticated()
@@ -51,7 +51,7 @@ class QueryResponseVersionOne extends MPIBaseMessage
     }
 
     /**
-     * Return true if the signature for the ACS response has been validated
+     * Return true if the signature for the ACS response has been validated.
      * @return bool
      */
     public function validSignature()
@@ -64,7 +64,7 @@ class QueryResponseVersionOne extends MPIBaseMessage
      *  For VISA
      *      05 - Issuer Liability
      *      06 - Issuer/Merchant Liability
-     *      07 - Merchant Liability
+     *      07 - Merchant Liability.
      * @return string
      */
     public function eci()
@@ -73,7 +73,7 @@ class QueryResponseVersionOne extends MPIBaseMessage
     }
 
     /**
-     * Cardholder Authentication Verification Value (CAVV)
+     * Cardholder Authentication Verification Value (CAVV).
      * @return mixed
      */
     public function cavv()
@@ -82,7 +82,7 @@ class QueryResponseVersionOne extends MPIBaseMessage
     }
 
     /**
-     * Identifier of the resulting transaction for the authentication process
+     * Identifier of the resulting transaction for the authentication process.
      * @return mixed
      */
     public function xid()
@@ -91,7 +91,7 @@ class QueryResponseVersionOne extends MPIBaseMessage
     }
 
     /**
-     * Returns this information as array to store it
+     * Returns this information as array to store it.
      */
     public function toArray()
     {
@@ -120,7 +120,7 @@ class QueryResponseVersionOne extends MPIBaseMessage
         $data = [
             'id' => $id,
             'authenticated' => $result['authentication_status'],
-            'validSignature' => !!$result['validated_signature'],
+            'validSignature' => (bool)$result['validated_signature'],
             'eci' => $result['eci'],
             'cavv' => isset($result['cavv']) ? $result['cavv'] : null,
             'xid' => isset($result['xid']) ? $result['xid'] : null,

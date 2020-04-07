@@ -5,7 +5,7 @@ namespace PlacetoPay\MPI\Contracts;
 interface MPIClient
 {
     /**
-     * Performs a HTTP request and returns the information on array
+     * Performs a HTTP request and returns the information on array.
      * @param $url
      * @param $method
      * @param $data

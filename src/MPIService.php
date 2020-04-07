@@ -62,13 +62,14 @@ class MPIService
     }
 
     /**
-     * Performs the query to know if the card can be authenticated
+     * Performs the query to know if the card can be authenticated.
      * @param $data
      * @return LookupResponseVersionOne
      * @throws \Exception
      */
     public function lookUp($data)
     {
+        $url = $this->url('/api/lookup');
         $url = $this->url($this->mpiManager->lookupEndpoint());
 
         $request = $this->mpiManager->lookup($data)->toArray();
@@ -87,7 +88,7 @@ class MPIService
     }
 
     /**
-     * Check the status of the authentication
+     * Check the status of the authentication.
      * @param $id
      * @param array $additional
      * @return QueryResponseVersionOne
@@ -131,7 +132,7 @@ class MPIService
     }
 
     /**
-     * Allows to change the API KEY without the need to instantiate another service
+     * Allows to change the API KEY without the need to instantiate another service.
      * @param $apiKey
      * @return $this
      */

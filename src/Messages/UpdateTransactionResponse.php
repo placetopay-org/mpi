@@ -23,4 +23,9 @@ class UpdateTransactionResponse
             'payment' => $result['payment'] ?? null,
         ]);
     }
+
+    public function amount(): float
+    {
+        return (float)$this->amount;
+    }
 }

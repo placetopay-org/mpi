@@ -27,7 +27,7 @@ class LookupResponseVersionOne extends MPIBaseMessage
     }
 
     /**
-     * Return true if the user can be authenticated through the MPI
+     * Return true if the user can be authenticated through the MPI.
      * @return bool
      */
     public function canAuthenticate()
@@ -39,7 +39,7 @@ class LookupResponseVersionOne extends MPIBaseMessage
     }
 
     /**
-     * Returns the URL to send the user to finish the authentication process
+     * Returns the URL to send the user to finish the authentication process.
      * @return string
      */
     public function processUrl()
@@ -48,7 +48,7 @@ class LookupResponseVersionOne extends MPIBaseMessage
     }
 
     /**
-     * Returns the request identifier used to query for the status of the authentication later on
+     * Returns the request identifier used to query for the status of the authentication later on.
      * @return string
      */
     public function identifier()
