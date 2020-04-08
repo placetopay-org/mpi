@@ -4,9 +4,10 @@ namespace PlacetoPay\MPI;
 
 use PlacetoPay\MPI\Clients\GuzzleMPIClient;
 use PlacetoPay\MPI\Constants\MPI;
-use PlacetoPay\MPI\Contracts\Request;
+use PlacetoPay\MPI\Contracts\LookupResponse;
 use PlacetoPay\MPI\Contracts\MPIClient;
 use PlacetoPay\MPI\Contracts\MPIException;
+use PlacetoPay\MPI\Contracts\QueryResponse;
 use PlacetoPay\MPI\Entities\MpiManager;
 use PlacetoPay\MPI\Messages\LookupResponseVersionOne;
 use PlacetoPay\MPI\Messages\QueryResponseVersionOne;
@@ -64,12 +65,11 @@ class MPIService
     /**
      * Performs the query to know if the card can be authenticated.
      * @param $data
-     * @return LookupResponseVersionOne
+     * @return LookupResponse
      * @throws \Exception
      */
-    public function lookUp($data)
+    public function lookUp($data): LookupResponse
     {
-        $url = $this->url('/api/lookup');
         $url = $this->url($this->mpiManager->lookupEndpoint());
 
         $request = $this->mpiManager->lookup($data)->toArray();
@@ -90,11 +90,11 @@ class MPIService
     /**
      * Check the status of the authentication.
      * @param $id
-     * @param array $additional
-     * @return QueryResponseVersionOne
+     * @param  array  $additional
+     * @return QueryResponse
      * @throws \Exception
      */
-    public function query($id, $additional = [])
+    public function query($id, $additional = []): QueryResponse
     {
         $url = $this->url($this->mpiManager->queryEndpoint($id));
         $method = 'GET';

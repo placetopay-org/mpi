@@ -3,8 +3,9 @@
 namespace PlacetoPay\MPI\Messages;
 
 use PlacetoPay\MPI\Constants\MPI;
+use PlacetoPay\MPI\Contracts\QueryResponse;
 
-class QueryResponseVersionTwo extends MPIBaseMessage
+class QueryResponseVersionTwo extends QueryResponse
 {
 
     private $id;
@@ -30,6 +31,8 @@ class QueryResponseVersionTwo extends MPIBaseMessage
 
     public static function loadFromResult($result, $id = null)
     {
+        parent::loadFromResult($result);
+
         $data = [
             'id' => $id,
             'transStatus' => $result['transStatus'],
@@ -72,7 +75,7 @@ class QueryResponseVersionTwo extends MPIBaseMessage
      * Returns true if the authentication process has been successfully completed
      * @return bool
      */
-    public function isAuthenticated()
+    public function isAuthenticated(): bool
     {
         return $this->authenticated() == 'Y' && $this->authenticationValue();
     }
@@ -85,7 +88,7 @@ class QueryResponseVersionTwo extends MPIBaseMessage
      *  “U” - Unable to Authenticate
      * @return string
      */
-    public function authenticated()
+    public function authenticated(): string
     {
         return $this->transStatus;
     }
@@ -98,7 +101,7 @@ class QueryResponseVersionTwo extends MPIBaseMessage
      *      07 - Merchant Liability
      * @return string
      */
-    public function eci()
+    public function eci(): string
     {
         return $this->eci;
     }

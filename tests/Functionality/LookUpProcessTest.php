@@ -3,6 +3,7 @@
 namespace PlacetoPay\MPI\Tests\Functionality;
 
 use PlacetoPay\MPI\Constants\MPI;
+use PlacetoPay\MPI\Contracts\LookupResponse;
 use PlacetoPay\MPI\Contracts\MPIException;
 use PlacetoPay\MPI\Exceptions\ErrorResultMPI;
 use PlacetoPay\MPI\Messages\LookupResponseVersionTwo;
@@ -16,7 +17,7 @@ class LookUpProcessTest extends BaseTestCase
         return new MPIService(array_merge([
             'url' => getenv('MPI_URL'),
             'apiKey' => getenv('MPI_API_KEY'),
-            'client' => new \PlacetoPay\MPI\Clients\MockClient(),
+            'client' => new \PlacetoPay\MPI\Clients\MockClientVersionOne(),
         ], $overwrite));
     }
 

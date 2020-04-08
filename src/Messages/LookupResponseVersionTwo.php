@@ -3,8 +3,9 @@
 namespace PlacetoPay\MPI\Messages;
 
 use PlacetoPay\MPI\Constants\MPI;
+use PlacetoPay\MPI\Contracts\LookupResponse;
 
-class LookupResponseVersionTwo extends MPIBaseMessage
+class LookupResponseVersionTwo extends LookupResponse
 {
 
     private $redirectUrl;
@@ -45,7 +46,7 @@ class LookupResponseVersionTwo extends MPIBaseMessage
      * Return true if the user can be authenticated through the MPI
      * @return bool
      */
-    public function canAuthenticate()
+    public function canAuthenticate(): bool
     {
         if ($this->redirectUrl) {
             return true;
@@ -58,12 +59,12 @@ class LookupResponseVersionTwo extends MPIBaseMessage
         return $this->sessionToken;
     }
 
-    public function processUrl()
+    public function processUrl(): string
     {
         return $this->redirectUrl;
     }
 
-    public function identifier()
+    public function identifier(): string
     {
         return $this->transactionId;
     }

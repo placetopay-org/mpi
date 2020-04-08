@@ -106,4 +106,5 @@ class QueryProcessTest extends BaseTestCase
         $this->assertFalse($response->isAuthenticated());
         $this->assertEquals('U', $response->authenticated());
     }
+
 }

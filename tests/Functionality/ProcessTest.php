@@ -12,7 +12,7 @@ class ProcessTest extends BaseTestCase
         return new MPIService(array_merge([
             'url' => 'https://dev.placetopay.ec/3ds-mpi/',
             'apiKey' => 'eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImp0aSI6Ijk4ZTFmMTVmZTk1ZDg4NTE4NjEyYTFhMjBlNDBmODA2ODA1MDllOWQ3Y2I1Yzg5ZTc3ZmRhY2U3OTRhMjZhZjk5ZjBjNjI5ZTc4MjZkZTVhIn0.eyJhdWQiOiIxIiwianRpIjoiOThlMWYxNWZlOTVkODg1MTg2MTJhMWEyMGU0MGY4MDY4MDUwOWU5ZDdjYjVjODllNzdmZGFjZTc5NGEyNmFmOTlmMGM2MjllNzgyNmRlNWEiLCJpYXQiOjE1MjU4MDcwMDYsIm5iZiI6MTUyNTgwNzAwNiwiZXhwIjoxNTU3MzQzMDA2LCJzdWIiOiIyIiwic2NvcGVzIjpbXX0.e4tvpy2tCXOsoz3fDhD8QI4guFZOmLq0TIv4491F1vi8WGGtxAT-68E5pJXHzKwocpF8mBDSz2Rlhmuypktv9nNEVTFPp18A7hReZlsjMqumOiUxCDF4YCejcfQOrY2NVxIvB8yrnQBaYXFD8au2EXfjAeSsOnrPjqZoTsK3XXY',
-            'client' => new \PlacetoPay\MPI\Clients\MockClient(),
+            'client' => new \PlacetoPay\MPI\Clients\MockClientVersionOne(),
         ], $overwrite));
     }
 
