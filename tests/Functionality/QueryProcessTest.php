@@ -90,7 +90,7 @@ class QueryProcessTest extends BaseTestCase
         $this->assertArrayHasKey('extra', $response->toArray());
 
         $this->assertTrue($response->isAuthenticated());
-        $this->assertEquals('AAABBZEEBgAAAAAAAAQGAAAAAAA=', $response->authenticationValue());
+        $this->assertEquals('AAABBZEEBgAAAAAAAAQGAAAAAAA=', $response->cavv());
         $this->assertEquals('07', $response->eci());
     }
 

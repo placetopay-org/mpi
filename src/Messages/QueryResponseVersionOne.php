@@ -75,9 +75,8 @@ class QueryResponseVersionOne extends QueryResponse
 
     /**
      * Cardholder Authentication Verification Value (CAVV).
-     * @return mixed
      */
-    public function cavv()
+    public function cavv(): ? string
     {
         return $this->cavv;
     }
@@ -86,7 +85,7 @@ class QueryResponseVersionOne extends QueryResponse
      * Identifier of the resulting transaction for the authentication process.
      * @return mixed
      */
-    public function xid()
+    public function xid(): ? string
     {
         return $this->xid;
     }

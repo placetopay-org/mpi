@@ -53,10 +53,10 @@ class QueryResponseVersionTwo extends QueryResponse
             'id' => $this->id(),
             'enrolled' => 'Y',
             'authenticated' => $this->authenticated(),
-            'validSignature' => '',
+            'validSignature' => true,
             'eci' => $this->eci(),
-            'xid' => $this->dsTransID(),
-            'cavv' => $this->authenticationValue(),
+            'xid' => $this->xid(),
+            'cavv' => $this->cavv(),
             'threeDSVersion' => MPI::VERSION_TWO,
             'extra' => [
                 'transStatusReason' => $this->reasonCode(),
@@ -77,7 +77,7 @@ class QueryResponseVersionTwo extends QueryResponse
      */
     public function isAuthenticated(): bool
     {
-        return $this->authenticated() == 'Y' && $this->authenticationValue();
+        return $this->authenticated() == 'Y' && $this->cavv();
     }
 
     /**
@@ -86,6 +86,10 @@ class QueryResponseVersionTwo extends QueryResponse
      *  “A” - Successful Attempt
      *  “N” - Failed Authentication
      *  “U” - Unable to Authenticate
+     *  ”C” - Challenge Required
+     *  ”D” - Challenge Required
+     *  ”R” - Failed Authenticate
+     *  ”I” - Challenge Required only informative
      * @return string
      */
     public function authenticated(): string
@@ -110,7 +114,7 @@ class QueryResponseVersionTwo extends QueryResponse
      * Return true if the signature for the ACS response has been validated
      * @return bool
      */
-    public function authenticationValue()
+    public function cavv(): ?string
     {
         return $this->authenticationValue;
     }
@@ -120,7 +124,7 @@ class QueryResponseVersionTwo extends QueryResponse
         return $this->acsTransId;
     }
 
-    public function dsTransID()
+    public function xid(): ? string
     {
         return $this->dsTransID;
     }

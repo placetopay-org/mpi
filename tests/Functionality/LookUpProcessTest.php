@@ -203,7 +203,7 @@ class LookUpProcessTest extends BaseTestCase
         $this->expectException(ErrorResultMPI::class);
         $mpi->lookUp([
             'card' => [
-                'number' => '4111111111111',
+                'number' => '4111111111111111',
                 'expirationYear' => '20',
                 'expirationMonth' => '12',
             ],
@@ -223,7 +223,7 @@ class LookUpProcessTest extends BaseTestCase
         $this->expectException(MPIException::class);
         $mpi->lookUp([
             'card' => [
-                'number' => '4111111111111',
+                'number' => '4111111111111111',
                 'expirationYear' => '20',
                 'expirationMonth' => '12',
             ],
@@ -245,7 +245,7 @@ class LookUpProcessTest extends BaseTestCase
         $this->expectException(MPIException::class);
         $mpi->lookUp([
             'card' => [
-                'number' => '4111111111111',
+                'number' => '4111111111111111',
                 'expirationYear' => '20',
                 'expirationMonth' => '12',
             ],
