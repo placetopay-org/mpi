@@ -1,8 +1,6 @@
 <?php
 
-
 namespace PlacetoPay\MPI\Entities;
-
 
 use PlacetoPay\MPI\Constants\MPI;
 use PlacetoPay\MPI\Contracts\LookupResponse;
@@ -24,14 +22,14 @@ class VersionTwoMpi implements MpiContract
         return LookupResponseVersionTwo::loadFromResult($data);
     }
 
-    public function lookupEndpoint()
+    public function lookupEndpoint(): string
     {
-        return MPI::LOOKUP_ENDPOINTS[MPI::VERSION_TWO] ;
+        return MPI::LOOKUP_ENDPOINTS[MPI::VERSION_TWO];
     }
 
-    public function queryEndpoint($id)
+    public function queryEndpoint($id): string
     {
-        return MPI::QUERY_ENDPOINTS[MPI::VERSION_TWO].$id;
+        return MPI::QUERY_ENDPOINTS[MPI::VERSION_TWO] . $id;
     }
 
     public function queryResponse(array $data, $id): QueryResponse

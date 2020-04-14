@@ -8,7 +8,7 @@ use PlacetoPay\MPI\Contracts\MPIException;
 class MockClientVersionOne implements MPIClient
 {
     /**
-     * Performs a HTTP request and returns the information on array
+     * Performs a HTTP request and returns the information on array.
      * @param $url
      * @param $method
      * @param $data
@@ -25,8 +25,8 @@ class MockClientVersionOne implements MPIClient
             $id = end($id);
 
             if ($method == 'GET') {
-               return $this->query($id);
-            } else if ($method == 'PATCH') {
+                return $this->query($id);
+            } elseif ($method == 'PATCH') {
                 return $this->update($id);
             }
             throw new MPIException("Incorrect HTTP Method {$method} ON {$url}");

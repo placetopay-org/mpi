@@ -75,7 +75,7 @@ class LookupResponseVersionOne extends LookupResponse
     public function toArray()
     {
         return [
-            'threeDSVersion' => MPI::VERSION_ONE,
+            'threeDSVersion' => $this->version(),
             'enrolled' => $this->enrolled(),
             'redirectUrl' => $this->processUrl(),
             'identifier' => $this->identifier(),
@@ -106,5 +106,19 @@ class LookupResponseVersionOne extends LookupResponse
         }
 
         return new self($data);
+    }
+
+    public function version(): string
+    {
+        return MPI::VERSION_ONE;
+    }
+
+    public function extra(): array
+    {
+        return [
+            'enrolled' => $this->enrolled(),
+            'eci' => $this->eci(),
+            'formData' => $this->formData(),
+        ];
     }
 }

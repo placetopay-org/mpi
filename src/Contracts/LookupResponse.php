@@ -6,10 +6,13 @@ use PlacetoPay\MPI\Messages\MPIBaseMessage;
 
 abstract class LookupResponse extends MPIBaseMessage
 {
-    abstract function processUrl(): string;
+    abstract public function processUrl(): string;
 
-    abstract function canAuthenticate(): bool;
+    abstract public function canAuthenticate(): bool;
 
-    abstract function identifier(): string;
+    abstract public function identifier(): string;
 
+    abstract public function version(): string;
+
+    abstract public function extra(): array;
 }

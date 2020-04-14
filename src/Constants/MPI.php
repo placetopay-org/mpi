@@ -9,14 +9,13 @@ interface MPI
 
     const LOOKUP_ENDPOINTS = [
       self::VERSION_ONE => '/api/lookup',
-      self::VERSION_TWO => '/api/threeds/v2/sessions'
+      self::VERSION_TWO => '/api/threeds/v2/sessions',
     ];
 
     const QUERY_ENDPOINTS = [
         self::VERSION_ONE => '/api/transactions/',
-        self::VERSION_TWO => '/api/threeds/v2/transactions/'
+        self::VERSION_TWO => '/api/threeds/v2/transactions/',
     ];
-
 
     const PAYMENT_TRANSACTION_CODE = '01';
     const RECURRING_TRANSACTION_CODE = '02';
@@ -24,6 +23,6 @@ interface MPI
 
     const THREEDS_AUTH_INDICATOR = [
         self::RECURRING_TRANSACTION_CODE,
-        self::INSTALLMENT_TRANSACTION_CODE
+        self::INSTALLMENT_TRANSACTION_CODE,
     ];
 }

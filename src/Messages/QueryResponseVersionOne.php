@@ -99,11 +99,11 @@ class QueryResponseVersionOne extends QueryResponse
             'id' => $this->id(),
             'enrolled' => 'Y',
             'authenticated' => $this->authenticated(),
-            'validSignature' => $this->validSignature,
+            'validSignature' => $this->validSignature(),
             'eci' => $this->eci(),
             'cavv' => $this->cavv(),
             'xid' => $this->xid(),
-            'threeDSVersion' => MPI::VERSION_ONE,
+            'threeDSVersion' => $this->version(),
         ];
     }
 
@@ -127,5 +127,17 @@ class QueryResponseVersionOne extends QueryResponse
         ];
 
         return new self($data);
+    }
+
+    public function version(): string
+    {
+        return MPI::VERSION_ONE;
+    }
+
+    public function extra(): array
+    {
+        return [
+            'validSignature' => $this->validSignature(),
+        ];
     }
 }

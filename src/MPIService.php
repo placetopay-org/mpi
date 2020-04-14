@@ -9,8 +9,6 @@ use PlacetoPay\MPI\Contracts\MPIClient;
 use PlacetoPay\MPI\Contracts\MPIException;
 use PlacetoPay\MPI\Contracts\QueryResponse;
 use PlacetoPay\MPI\Entities\MpiManager;
-use PlacetoPay\MPI\Messages\LookupResponseVersionOne;
-use PlacetoPay\MPI\Messages\QueryResponseVersionOne;
 use PlacetoPay\MPI\Messages\UpdateTransactionRequest;
 use PlacetoPay\MPI\Messages\UpdateTransactionResponse;
 

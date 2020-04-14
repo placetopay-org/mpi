@@ -6,16 +6,19 @@ use PlacetoPay\MPI\Messages\MPIBaseMessage;
 
 abstract class QueryResponse extends MPIBaseMessage
 {
-    abstract function id();
+    abstract public function id();
 
-    abstract function isAuthenticated(): bool;
+    abstract public function isAuthenticated(): bool;
 
-    abstract function authenticated(): string;
+    abstract public function authenticated(): string;
 
-    abstract function eci(): string;
+    abstract public function eci(): string;
 
-    abstract function cavv(): ?string;
+    abstract public function cavv(): ?string;
 
-    abstract function xid(): ?string;
+    abstract public function xid(): ?string;
 
+    abstract public function version(): string;
+
+    abstract public function extra(): array;
 }

@@ -2,7 +2,6 @@
 
 namespace PlacetoPay\MPI\Requests;
 
-use PlacetoPay\MPI\Constants\MPI;
 use PlacetoPay\MPI\Contracts\Request;
 
 class LookupRequestVersionOne implements Request
@@ -82,7 +81,7 @@ class LookupRequestVersionOne implements Request
             'reference' => $this->reference,
             'currency' => $this->currency,
             'redirect_uri' => $this->redirect_uri,
-            'disable_redirect' => $this->disable_redirect
+            'disable_redirect' => $this->disable_redirect,
         ];
 
         if (isset($this->installments)) {

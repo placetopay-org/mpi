@@ -3,7 +3,6 @@
 namespace PlacetoPay\MPI\Tests\Functionality;
 
 use PlacetoPay\MPI\Constants\MPI;
-use PlacetoPay\MPI\Contracts\LookupResponse;
 use PlacetoPay\MPI\Contracts\MPIException;
 use PlacetoPay\MPI\Exceptions\ErrorResultMPI;
 use PlacetoPay\MPI\Messages\LookupResponseVersionTwo;
@@ -179,9 +178,9 @@ class LookUpProcessTest extends BaseTestCase
 
         $response = $mpi->lookUp([
             'card' => [
-                'number' => '4012000000001006',
+                'number' => '4532840681197602',
                 'expirationYear' => '20',
-                'expirationMonth' => '12',
+                'expirationMonth' => '01',
             ],
             'amount' => 1200,
             'currency' => 'COP',
@@ -203,7 +202,7 @@ class LookUpProcessTest extends BaseTestCase
         $this->expectException(ErrorResultMPI::class);
         $mpi->lookUp([
             'card' => [
-                'number' => '4111111111111111',
+                'number' => '4716036206946551',
                 'expirationYear' => '20',
                 'expirationMonth' => '12',
             ],
@@ -223,7 +222,7 @@ class LookUpProcessTest extends BaseTestCase
         $this->expectException(MPIException::class);
         $mpi->lookUp([
             'card' => [
-                'number' => '4111111111111111',
+                'number' => '4716036206946551',
                 'expirationYear' => '20',
                 'expirationMonth' => '12',
             ],
@@ -231,7 +230,7 @@ class LookUpProcessTest extends BaseTestCase
             'currency' => 'COP',
             'redirectUrl' => 'https://dnetix.co/ping/3ds',
             'threeDSAuthenticationInd' => 03,
-            'recurringExpiry' => '15'
+            'recurringExpiry' => '15',
         ]);
     }
 
@@ -245,7 +244,7 @@ class LookUpProcessTest extends BaseTestCase
         $this->expectException(MPIException::class);
         $mpi->lookUp([
             'card' => [
-                'number' => '4111111111111111',
+                'number' => '6011499026766178',
                 'expirationYear' => '20',
                 'expirationMonth' => '12',
             ],
@@ -253,7 +252,7 @@ class LookUpProcessTest extends BaseTestCase
             'currency' => 'COP',
             'redirectUrl' => 'https://dnetix.co/ping/3ds',
             'threeDSAuthenticationInd' => 03,
-            'recurringFrequency' => '15'
+            'recurringFrequency' => '15',
         ]);
     }
 }

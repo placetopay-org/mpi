@@ -7,7 +7,6 @@ use PlacetoPay\MPI\Contracts\QueryResponse;
 
 class QueryResponseVersionTwo extends QueryResponse
 {
-
     private $id;
     private $transStatus;
     private $eci;
@@ -57,11 +56,11 @@ class QueryResponseVersionTwo extends QueryResponse
             'eci' => $this->eci(),
             'xid' => $this->xid(),
             'cavv' => $this->cavv(),
-            'threeDSVersion' => MPI::VERSION_TWO,
+            'threeDSVersion' => $this->version(),
             'extra' => [
                 'transStatusReason' => $this->reasonCode(),
                 'acsTransId' => $this->acsTransId(),
-                'threeDSServerTransID' => $this->threeDsServerTransId()
+                'threeDSServerTransID' => $this->threeDsServerTransId(),
             ],
         ];
     }
@@ -72,7 +71,7 @@ class QueryResponseVersionTwo extends QueryResponse
     }
 
     /**
-     * Returns true if the authentication process has been successfully completed
+     * Returns true if the authentication process has been successfully completed.
      * @return bool
      */
     public function isAuthenticated(): bool
@@ -89,7 +88,7 @@ class QueryResponseVersionTwo extends QueryResponse
      *  ”C” - Challenge Required
      *  ”D” - Challenge Required
      *  ”R” - Failed Authenticate
-     *  ”I” - Challenge Required only informative
+     *  ”I” - Challenge Required only informative.
      * @return string
      */
     public function authenticated(): string
@@ -102,7 +101,7 @@ class QueryResponseVersionTwo extends QueryResponse
      *  For VISA
      *      05 - Issuer Liability
      *      06 - Issuer/Merchant Liability
-     *      07 - Merchant Liability
+     *      07 - Merchant Liability.
      * @return string
      */
     public function eci(): string
@@ -111,7 +110,7 @@ class QueryResponseVersionTwo extends QueryResponse
     }
 
     /**
-     * Return true if the signature for the ACS response has been validated
+     * Return true if the signature for the ACS response has been validated.
      * @return bool
      */
     public function cavv(): ?string
@@ -137,5 +136,19 @@ class QueryResponseVersionTwo extends QueryResponse
     public function threeDsServerTransId()
     {
         return $this->threeDSServerTransId;
+    }
+
+    public function version(): string
+    {
+        return MPI::VERSION_TWO;
+    }
+
+    public function extra(): array
+    {
+        return [
+            'transStatusReason' => $this->reasonCode(),
+            'acsTransId' => $this->acsTransId(),
+            'threeDSServerTransID' => $this->threeDsServerTransId(),
+        ];
     }
 }

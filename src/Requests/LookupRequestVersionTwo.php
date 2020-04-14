@@ -76,8 +76,8 @@ class LookupRequestVersionTwo implements Request
     }
 
     /**
-     * Returns the expiration year always with YY format
-     * @param String $expirationYear
+     * Returns the expiration year always with YY format.
+     * @param string $expirationYear
      * @return string
      */
     public function expirationYearShort(String $expirationYear)
@@ -91,7 +91,7 @@ class LookupRequestVersionTwo implements Request
         return $expirationYear;
     }
 
-    public function toArray(): array 
+    public function toArray(): array
     {
         return [
             'acctNumber' => $this->accNumber,
@@ -116,19 +116,17 @@ class LookupRequestVersionTwo implements Request
     protected function threeDSAuthValidation($data)
     {
         if (in_array($this->threeDSAuthenticationInd, MPI::THREEDS_AUTH_INDICATOR)) {
-            if ( ! isset($data['recurringFrequency'])) {
+            if (!isset($data['recurringFrequency'])) {
                 throw new MPIException("The recurring frequency field is required when three d s authentication ind is {$this->threeDSAuthenticationInd}.");
             }
 
-            if ( ! isset($data['recurringExpiry'])) {
+            if (!isset($data['recurringExpiry'])) {
                 throw new MPIException("The recurring expiry field is required when three d s authentication ind is {$this->threeDSAuthenticationInd}.");
             }
 
-            if ($this->threeDSAuthenticationInd == '03' && ! isset($data['recurringFrequency'])) {
+            if ($this->threeDSAuthenticationInd == '03' && !isset($data['recurringFrequency'])) {
                 throw new MPIException("The purchase instal data field is required when three d s authentication ind is {$this->threeDSAuthenticationInd}.");
             }
         }
     }
-
-
 }

@@ -7,7 +7,6 @@ use PlacetoPay\MPI\Contracts\LookupResponse;
 
 class LookupResponseVersionTwo extends LookupResponse
 {
-
     private $redirectUrl;
     private $transactionId;
     private $sessionToken;
@@ -26,16 +25,16 @@ class LookupResponseVersionTwo extends LookupResponse
         $data = [
             'sessionToken' => $result['sessionToken'],
             'redirectURL' => isset($result['redirectURL']) ? $result['redirectURL'] : null,
-            'transactionID' => isset($result['transactionID']) ? $result['transactionID'] : null
+            'transactionID' => isset($result['transactionID']) ? $result['transactionID'] : null,
         ];
 
         return new self($data);
     }
 
-    public function toArray()
+    public function toArray(): array
     {
         return [
-            'threeDSVersion' => MPI::VERSION_TWO,
+            'threeDSVersion' => $this->version(),
             'sessionToken' => $this->sessionToken(),
             'redirectUrl' => $this->processUrl(),
             'identifier' => $this->identifier(),
@@ -43,7 +42,7 @@ class LookupResponseVersionTwo extends LookupResponse
     }
 
     /**
-     * Return true if the user can be authenticated through the MPI
+     * Return true if the user can be authenticated through the MPI.
      * @return bool
      */
     public function canAuthenticate(): bool
@@ -54,7 +53,7 @@ class LookupResponseVersionTwo extends LookupResponse
         return false;
     }
 
-    public function sessionToken()
+    public function sessionToken(): string
     {
         return $this->sessionToken;
     }
@@ -67,5 +66,17 @@ class LookupResponseVersionTwo extends LookupResponse
     public function identifier(): string
     {
         return $this->transactionId;
+    }
+
+    public function version(): string
+    {
+        return MPI::VERSION_TWO;
+    }
+
+    public function extra(): array
+    {
+        return [
+            'sessionToken' => $this->sessionToken(),
+        ];
     }
 }
