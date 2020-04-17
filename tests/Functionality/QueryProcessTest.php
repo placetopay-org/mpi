@@ -91,7 +91,7 @@ class QueryProcessTest extends BaseTestCase
 
         $this->assertTrue($response->isAuthenticated());
         $this->assertEquals('AAABBZEEBgAAAAAAAAQGAAAAAAA=', $response->cavv());
-        $this->assertEquals('07', $response->eci());
+        $this->assertEquals('05', $response->eci());
     }
 
     public function testItDoesAuthenticateOnTreeDSServer()
@@ -102,7 +102,6 @@ class QueryProcessTest extends BaseTestCase
         ]);
 
         $response = $mpi->query(2);
-
         $this->assertFalse($response->isAuthenticated());
         $this->assertEquals('U', $response->authenticated());
     }

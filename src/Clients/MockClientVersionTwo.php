@@ -17,7 +17,14 @@ class MockClientVersionTwo implements MPIClient
         if (strpos($url, MPI::LOOKUP_ENDPOINTS[MPI::VERSION_TWO]) !== false) {
             return $this->lookup($url, $method, $data);
         } else {
-            return $this->query($url, $method);
+            $id = explode('/', $url);
+            $id = end($id);
+
+            if ($method == 'PATCH') {
+                return $this->update($id);
+            } else {
+                return $this->query($url, $method);
+            }
         }
     }
 
@@ -38,7 +45,7 @@ class MockClientVersionTwo implements MPIClient
             case '4532840681197602':
                 return [
                     'sessionToken' => rand(60, 60),
-                    'redirectURL' => 'https://dnetix.co/ping/3ds',
+                    'redirectURL' => $data['redirectURI'],
                     'transactionID' => substr($data['cardExpiryDate'], -2),
                 ];
                 break;
@@ -88,7 +95,7 @@ class MockClientVersionTwo implements MPIClient
                 case 1:
                     return [
                         'transStatus' => 'Y',
-                        'eci' => '07',
+                        'eci' => '05',
                         'acsTransID' => '37a7b6e0-fd58-4e38-98de-79c70c526a47',
                         'dsTransID' => 'de018c08-bd14-426a-9d52-46500a17091e=',
                         'threeDSServerTransID' => 'eadd3a60-b870-41d0-977f-921b3dbe6323/MkGJDl2Y5E=',
@@ -134,7 +141,7 @@ class MockClientVersionTwo implements MPIClient
                 case 6:
                     return [
                         'transStatus' => 'A',
-                        'eci' => '07',
+                        'eci' => '06',
                         'acsTransID' => '42e4727a-77ac-44a3-8b8c-c58b48e48cc8',
                         'dsTransID' => 'a59c5a5d-f041-4c23-ad22-eca4ee9060b6',
                         'threeDSServerTransID' => 'b5723933-f822-43af-b82f-b48b4983da81',
@@ -144,5 +151,58 @@ class MockClientVersionTwo implements MPIClient
         }
 
         throw new MPIException("Incorrect HTTP Method {$method} ON {$url}");
+    }
+
+
+    /**
+     * @param $id
+     * @return array
+     */
+    public function update($id): array
+    {
+        return [
+            'id' => $id,
+            'reference' => 'Test reference',
+            'created_at' => '2019-08-28 14:34:23',
+            'merchant' => [
+                'id' => 1,
+                'name' => 'EGM Ingenería sin Fronteras',
+                'brand' => 'PlacetoPay',
+            ],
+            'truncated_pan' => '401200******1112',
+            'amount' => '75000.00',
+            'amount_formatted' => '$750.00',
+            'protocol' => '1.0.2',
+            'currency' => [
+                'currency' => 'US Dollar',
+                'alphabetic_code' => 'USD',
+                'numeric_code' => '840',
+                'minor_unit' => 2,
+            ],
+            'payment' => [
+                'processor' => 'processorTest',
+                'authorization' => 'autorizationCode',
+                'provider' => 'Interdin',
+                'base24' => 'xid',
+                'iso' => null,
+            ],
+            'verification_response' => [
+                'status' => 'Y',
+                'text' => 'Card enrolled',
+            ],
+            'authentication_response' => [
+                'status' => 'Y',
+                'text' => 'Full Authentication',
+            ],
+            'eci_response' => [
+                'status' => 'success',
+                'code' => '05',
+                'text' => 'Eci => 05',
+            ],
+            'validated_signature' => true,
+            'franchise' => [
+                'brand' => 'visa',
+            ],
+        ];
     }
 }
