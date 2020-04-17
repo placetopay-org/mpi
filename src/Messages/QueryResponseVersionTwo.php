@@ -56,7 +56,7 @@ class QueryResponseVersionTwo extends QueryResponse
             'eci' => $this->eci(),
             'xid' => $this->xid(),
             'cavv' => $this->cavv(),
-            'threeDSVersion' => $this->version(),
+            'version' => $this->version(),
             'extra' => [
                 'transStatusReason' => $this->reasonCode(),
                 'acsTransId' => $this->acsTransId(),

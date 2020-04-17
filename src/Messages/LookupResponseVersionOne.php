@@ -75,7 +75,7 @@ class LookupResponseVersionOne extends LookupResponse
     public function toArray()
     {
         return [
-            'threeDSVersion' => $this->version(),
+            'version' => $this->version(),
             'enrolled' => $this->enrolled(),
             'redirectUrl' => $this->processUrl(),
             'identifier' => $this->identifier(),

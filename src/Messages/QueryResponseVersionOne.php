@@ -103,7 +103,7 @@ class QueryResponseVersionOne extends QueryResponse
             'eci' => $this->eci(),
             'cavv' => $this->cavv(),
             'xid' => $this->xid(),
-            'threeDSVersion' => $this->version(),
+            'version' => $this->version(),
         ];
     }
 

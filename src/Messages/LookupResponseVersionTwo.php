@@ -34,7 +34,7 @@ class LookupResponseVersionTwo extends LookupResponse
     public function toArray(): array
     {
         return [
-            'threeDSVersion' => $this->version(),
+            'version' => $this->version(),
             'sessionToken' => $this->sessionToken(),
             'redirectUrl' => $this->processUrl(),
             'identifier' => $this->identifier(),
