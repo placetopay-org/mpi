@@ -2,6 +2,7 @@
 
 namespace PlacetoPay\MPI\Tests\Functionality;
 
+use PlacetoPay\MPI\Constants\MPI;
 use PlacetoPay\MPI\MPIService;
 use PlacetoPay\MPI\Tests\BaseTestCase;
 
@@ -12,7 +13,7 @@ class QueryProcessTest extends BaseTestCase
         return new MPIService(array_merge([
             'url' => getenv('MPI_URL'),
             'apiKey' => getenv('MPI_API_KEY'),
-            'client' => new \PlacetoPay\MPI\Clients\MockClient(),
+            'client' => new \PlacetoPay\MPI\Clients\MockClientVersionOne(),
         ], $overwrite));
     }
 
@@ -68,7 +69,40 @@ class QueryProcessTest extends BaseTestCase
             'xid' => 'Z8UuHYF8Epz46M8V/MkGJDl2Y5E=',
             'enrolled' => 'Y',
             'authenticated' => 'Y',
+            'version' => MPI::VERSION_ONE,
             'id' => 1,
         ], $response->toArray());
+    }
+
+    public function testItObtainsQueryVersionTwoSuccessfully()
+    {
+        $mpi = $this->create([
+            '3dsVersion' => MPI::VERSION_TWO,
+            'client' => new \PlacetoPay\MPI\Clients\MockClientVersionTwo(),
+        ]);
+
+        $response = $mpi->query(1);
+
+        $this->assertArrayHasKey('authenticated', $response->toArray());
+        $this->assertArrayHasKey('eci', $response->toArray());
+        $this->assertArrayHasKey('xid', $response->toArray());
+        $this->assertArrayHasKey('cavv', $response->toArray());
+        $this->assertArrayHasKey('extra', $response->toArray());
+
+        $this->assertTrue($response->isAuthenticated());
+        $this->assertEquals('AAABBZEEBgAAAAAAAAQGAAAAAAA=', $response->cavv());
+        $this->assertEquals('05', $response->eci());
+    }
+
+    public function testItDoesAuthenticateOnTreeDSServer()
+    {
+        $mpi = $this->create([
+            '3dsVersion' => MPI::VERSION_TWO,
+            'client' => new \PlacetoPay\MPI\Clients\MockClientVersionTwo(),
+        ]);
+
+        $response = $mpi->query(2);
+        $this->assertFalse($response->isAuthenticated());
+        $this->assertEquals('U', $response->authenticated());
     }
 }

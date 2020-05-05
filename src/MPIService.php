@@ -3,10 +3,12 @@
 namespace PlacetoPay\MPI;
 
 use PlacetoPay\MPI\Clients\GuzzleMPIClient;
+use PlacetoPay\MPI\Constants\MPI;
+use PlacetoPay\MPI\Contracts\LookupResponse;
 use PlacetoPay\MPI\Contracts\MPIClient;
 use PlacetoPay\MPI\Contracts\MPIException;
-use PlacetoPay\MPI\Messages\LookUpResponse;
-use PlacetoPay\MPI\Messages\QueryResponse;
+use PlacetoPay\MPI\Contracts\QueryResponse;
+use PlacetoPay\MPI\Entities\MpiManager;
 use PlacetoPay\MPI\Messages\UpdateTransactionRequest;
 use PlacetoPay\MPI\Messages\UpdateTransactionResponse;
 
@@ -24,6 +26,11 @@ class MPIService
     ];
 
     /**
+     * @var \PlacetoPay\MPI\Entities\MpiContract
+     */
+    private $mpiManager;
+
+    /**
      * MPIService constructor.
      * @param $settings
      * @throws MPIException
@@ -38,6 +45,12 @@ class MPIService
             $this->apiKey = $settings['apiKey'];
         }
 
+        if (isset($settings['3dsVersion'])) {
+            $this->mpiManager = MpiManager::create($settings['3dsVersion']);
+        } else {
+            $this->mpiManager = MpiManager::create(MPI::VERSION_ONE);
+        }
+
         if (isset($settings['client']) && $settings['client'] instanceof MPIClient) {
             $this->client = $settings['client'];
         } else {
@@ -50,50 +63,38 @@ class MPIService
     /**
      * Performs the query to know if the card can be authenticated.
      * @param $data
-     * @return LookUpResponse
-     * @throws Exceptions\ErrorResultMPI
+     * @return LookupResponse
+     * @throws \Exception
      */
-    public function lookUp($data)
+    public function lookUp($data): LookupResponse
     {
-        $url = $this->url('/api/lookup');
+        $url = $this->url($this->mpiManager->lookupEndpoint());
+
+        $request = $this->mpiManager->lookup($data)->toArray();
+
         $method = 'POST';
 
         $this->addHeader('Authorization', 'Bearer ' . $this->apiKey);
-
-        $request = [
-            'locale' => isset($data['locale']) ? $data['locale'] : 'es',
-            'pan' => $data['card']['number'],
-            'expiration_year' => $data['card']['expirationYear'],
-            'expiration_month' => $data['card']['expirationMonth'],
-            'amount' => $data['amount'],
-            'reference' => $data['reference'] ?? null,
-            'currency' => $data['currency'],
-            'redirect_uri' => $data['redirectUrl'],
-            'disable_redirect' => isset($data['disableRedirect']) ? $data['disableRedirect'] : false,
-        ];
-
-        if (isset($data['card']['installments'])) {
-            $request['installments'] = $data['card']['installments'];
-        }
 
         if (isset($data['userAgent'])) {
             $this->addHeader('User-Agent', $data['userAgent']);
         }
 
         $response = $this->client()->execute($url, $method, $request, $this->headers());
-        return LookUpResponse::loadFromResult($response);
+
+        return $this->mpiManager->lookupResponse($response);
     }
 
     /**
      * Check the status of the authentication.
      * @param $id
-     * @param array $additional
+     * @param  array  $additional
      * @return QueryResponse
-     * @throws Exceptions\ErrorResultMPI
+     * @throws \Exception
      */
-    public function query($id, $additional = [])
+    public function query($id, $additional = []): QueryResponse
     {
-        $url = $this->url('/api/transactions/' . $id);
+        $url = $this->url($this->mpiManager->queryEndpoint($id));
         $method = 'GET';
 
         $this->addHeader('Authorization', 'Bearer ' . $this->apiKey);
@@ -103,7 +104,7 @@ class MPIService
         }
 
         $response = $this->client()->execute($url, $method, [], $this->headers());
-        return QueryResponse::loadFromResult($response, $id);
+        return $this->mpiManager->queryResponse($response, $id);
     }
 
     public function update($id, UpdateTransactionRequest $request): UpdateTransactionResponse

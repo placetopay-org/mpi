@@ -2,7 +2,10 @@
 
 namespace PlacetoPay\MPI\Messages;
 
-class LookUpResponse extends MPIBaseMessage
+use PlacetoPay\MPI\Constants\MPI;
+use PlacetoPay\MPI\Contracts\LookupResponse;
+
+class LookupResponseVersionOne extends LookupResponse
 {
     protected $enrolled;
     protected $redirectUrl;
@@ -28,7 +31,7 @@ class LookUpResponse extends MPIBaseMessage
      * Return true if the user can be authenticated through the MPI.
      * @return bool
      */
-    public function canAuthenticate()
+    public function canAuthenticate(): bool
     {
         if ($this->redirectUrl) {
             return true;
@@ -40,7 +43,7 @@ class LookUpResponse extends MPIBaseMessage
      * Returns the URL to send the user to finish the authentication process.
      * @return string
      */
-    public function processUrl()
+    public function processUrl(): string
     {
         return $this->redirectUrl;
     }
@@ -49,7 +52,7 @@ class LookUpResponse extends MPIBaseMessage
      * Returns the request identifier used to query for the status of the authentication later on.
      * @return string
      */
-    public function identifier()
+    public function identifier(): string
     {
         return $this->identifier;
     }
@@ -72,6 +75,7 @@ class LookUpResponse extends MPIBaseMessage
     public function toArray()
     {
         return [
+            'version' => $this->version(),
             'enrolled' => $this->enrolled(),
             'redirectUrl' => $this->processUrl(),
             'identifier' => $this->identifier(),
@@ -102,5 +106,19 @@ class LookUpResponse extends MPIBaseMessage
         }
 
         return new self($data);
+    }
+
+    public function version(): string
+    {
+        return MPI::VERSION_ONE;
+    }
+
+    public function extra(): array
+    {
+        return [
+            'enrolled' => $this->enrolled(),
+            'eci' => $this->eci(),
+            'formData' => $this->formData(),
+        ];
     }
 }

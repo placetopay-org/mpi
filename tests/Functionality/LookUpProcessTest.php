@@ -2,6 +2,10 @@
 
 namespace PlacetoPay\MPI\Tests\Functionality;
 
+use PlacetoPay\MPI\Constants\MPI;
+use PlacetoPay\MPI\Contracts\MPIException;
+use PlacetoPay\MPI\Exceptions\ErrorResultMPI;
+use PlacetoPay\MPI\Messages\LookupResponseVersionTwo;
 use PlacetoPay\MPI\MPIService;
 use PlacetoPay\MPI\Tests\BaseTestCase;
 
@@ -12,7 +16,7 @@ class LookUpProcessTest extends BaseTestCase
         return new MPIService(array_merge([
             'url' => getenv('MPI_URL'),
             'apiKey' => getenv('MPI_API_KEY'),
-            'client' => new \PlacetoPay\MPI\Clients\MockClient(),
+            'client' => new \PlacetoPay\MPI\Clients\MockClientVersionOne(),
         ], $overwrite));
     }
 
@@ -163,5 +167,92 @@ class LookUpProcessTest extends BaseTestCase
         ]);
 
         $this->assertFalse($response->canAuthenticate());
+    }
+
+    public function testItConstructTheVersionTwoEntityCorrectly()
+    {
+        $mpi = $this->create([
+            '3dsVersion' => MPI::VERSION_TWO,
+            'client' => new \PlacetoPay\MPI\Clients\MockClientVersionTwo(),
+        ]);
+
+        $response = $mpi->lookUp([
+            'card' => [
+                'number' => '4532840681197602',
+                'expirationYear' => '20',
+                'expirationMonth' => '01',
+            ],
+            'amount' => 1200,
+            'currency' => 'COP',
+            'redirectUrl' => 'https://dnetix.co/ping/3ds',
+        ]);
+
+        $this->assertInstanceOf(LookupResponseVersionTwo::class, $response);
+        $this->assertTrue($response->canAuthenticate());
+        $this->assertEquals('https://dnetix.co/ping/3ds', $response->processUrl());
+    }
+
+    public function testThrowExceptionItInvalidResponse()
+    {
+        $mpi = $this->create([
+            '3dsVersion' => MPI::VERSION_TWO,
+            'client' => new \PlacetoPay\MPI\Clients\MockClientVersionTwo(),
+        ]);
+
+        $this->expectException(ErrorResultMPI::class);
+        $mpi->lookUp([
+            'card' => [
+                'number' => '4716036206946551',
+                'expirationYear' => '20',
+                'expirationMonth' => '12',
+            ],
+            'amount' => 1200,
+            'currency' => 'COP',
+            'redirectUrl' => 'https://dnetix.co/ping/3ds',
+        ]);
+    }
+
+    public function testThrowExceptionWhenDoesntHasRecurringFrecuency()
+    {
+        $mpi = $this->create([
+            '3dsVersion' => MPI::VERSION_TWO,
+            'client' => new \PlacetoPay\MPI\Clients\MockClientVersionTwo(),
+        ]);
+
+        $this->expectException(MPIException::class);
+        $mpi->lookUp([
+            'card' => [
+                'number' => '4716036206946551',
+                'expirationYear' => '20',
+                'expirationMonth' => '12',
+            ],
+            'amount' => 1200,
+            'currency' => 'COP',
+            'redirectUrl' => 'https://dnetix.co/ping/3ds',
+            'threeDSAuthenticationInd' => 03,
+            'recurringExpiry' => '15',
+        ]);
+    }
+
+    public function testThrowExceptionWhenDoesntHasRecurringExpiry()
+    {
+        $mpi = $this->create([
+            '3dsVersion' => MPI::VERSION_TWO,
+            'client' => new \PlacetoPay\MPI\Clients\MockClientVersionTwo(),
+        ]);
+
+        $this->expectException(MPIException::class);
+        $mpi->lookUp([
+            'card' => [
+                'number' => '6011499026766178',
+                'expirationYear' => '20',
+                'expirationMonth' => '12',
+            ],
+            'amount' => 1200,
+            'currency' => 'COP',
+            'redirectUrl' => 'https://dnetix.co/ping/3ds',
+            'threeDSAuthenticationInd' => 03,
+            'recurringFrequency' => '15',
+        ]);
     }
 }

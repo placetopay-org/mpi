@@ -2,7 +2,10 @@
 
 namespace PlacetoPay\MPI\Messages;
 
-class QueryResponse extends MPIBaseMessage
+use PlacetoPay\MPI\Constants\MPI;
+use PlacetoPay\MPI\Contracts\QueryResponse;
+
+class QueryResponseVersionOne extends QueryResponse
 {
     protected $id;
     protected $authenticated;
@@ -30,7 +33,7 @@ class QueryResponse extends MPIBaseMessage
      * Returns true if the authentication process has been successfully completed.
      * @return bool
      */
-    public function isAuthenticated()
+    public function isAuthenticated(): bool
     {
         return $this->authenticated() == 'Y' && $this->validSignature();
     }
@@ -43,7 +46,7 @@ class QueryResponse extends MPIBaseMessage
      *  “U” - Unable to Authenticate.
      * @return string
      */
-    public function authenticated()
+    public function authenticated(): string
     {
         return $this->authenticated;
     }
@@ -65,16 +68,15 @@ class QueryResponse extends MPIBaseMessage
      *      07 - Merchant Liability.
      * @return string
      */
-    public function eci()
+    public function eci(): string
     {
         return $this->eci;
     }
 
     /**
      * Cardholder Authentication Verification Value (CAVV).
-     * @return mixed
      */
-    public function cavv()
+    public function cavv(): ? string
     {
         return $this->cavv;
     }
@@ -83,7 +85,7 @@ class QueryResponse extends MPIBaseMessage
      * Identifier of the resulting transaction for the authentication process.
      * @return mixed
      */
-    public function xid()
+    public function xid(): ? string
     {
         return $this->xid;
     }
@@ -97,17 +99,18 @@ class QueryResponse extends MPIBaseMessage
             'id' => $this->id(),
             'enrolled' => 'Y',
             'authenticated' => $this->authenticated(),
-            'validSignature' => $this->validSignature,
+            'validSignature' => $this->validSignature(),
             'eci' => $this->eci(),
             'cavv' => $this->cavv(),
             'xid' => $this->xid(),
+            'version' => $this->version(),
         ];
     }
 
     /**
      * @param $result
      * @param null $id
-     * @return QueryResponse
+     * @return QueryResponseVersionOne
      * @throws \PlacetoPay\MPI\Exceptions\ErrorResultMPI
      */
     public static function loadFromResult($result, $id = null)
@@ -124,5 +127,17 @@ class QueryResponse extends MPIBaseMessage
         ];
 
         return new self($data);
+    }
+
+    public function version(): string
+    {
+        return MPI::VERSION_ONE;
+    }
+
+    public function extra(): array
+    {
+        return [
+            'validSignature' => $this->validSignature(),
+        ];
     }
 }
