@@ -148,6 +148,7 @@ class LookUpProcessTest extends BaseTestCase
 
         $this->assertFalse($response->canAuthenticate());
         $this->assertEquals('07', $response->eci());
+        $this->assertIsArray($response->toArray());
     }
 
     public function testItValidatesCorrectlyTheRedirectUrl()

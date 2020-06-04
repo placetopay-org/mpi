@@ -8,7 +8,15 @@ use PlacetoPay\MPI\Contracts\LookupResponse;
 class LookupResponseVersionOne extends LookupResponse
 {
     protected $enrolled;
+
+    /**
+     * @var null|string
+     */
     protected $redirectUrl;
+
+    /**
+     * @var null|string
+     */
     protected $identifier;
     protected $eci;
     /**
@@ -41,18 +49,18 @@ class LookupResponseVersionOne extends LookupResponse
 
     /**
      * Returns the URL to send the user to finish the authentication process.
-     * @return string
+     * @return null|string
      */
-    public function processUrl(): string
+    public function processUrl(): ?string
     {
         return $this->redirectUrl;
     }
 
     /**
      * Returns the request identifier used to query for the status of the authentication later on.
-     * @return string
+     * @return null|string
      */
-    public function identifier(): string
+    public function identifier(): ?string
     {
         return $this->identifier;
     }
