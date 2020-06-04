@@ -153,7 +153,6 @@ class MockClientVersionTwo implements MPIClient
         throw new MPIException("Incorrect HTTP Method {$method} ON {$url}");
     }
 
-
     /**
      * @param $id
      * @return array
