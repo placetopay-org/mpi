@@ -33,6 +33,10 @@ jobs:
       - name: Install dependencies
         run: |
           composer install --no-interaction
+          composer validate --no-check-all --strict
 
+      - name: Execute php-cs-fixer
+        run: vendor/bin/php-cs-fixer fix --config=.php_cs -v --dry-run --stop-on-violation --using-cache=no
+ 
       - name: Execute tests
         run: vendor/bin/phpunit
