@@ -36,8 +36,9 @@
     "symfony/var-dumper": "^4.1"
   },
   "scripts": {
-    "phpcs": "phpcs --standard=PSR2 --ignore=tests/coverage src/ tests/",
+    "phpcs": "vendor/bin/php-cs-fixer fix --config=.php_cs -v --dry-run --stop-on-violation --using-cache=no",
     "phpunit": "phpunit --verbose --testdox",
+    "php-cs-fixer": "vendor/bin/php-cs-fixer fix --config=.php_cs",
     "test": [
       "@phpcs",
       "@phpunit"
