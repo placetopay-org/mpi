@@ -4,8 +4,8 @@ namespace PlacetoPay\MPI\Constants;
 
 interface MPI
 {
-    const VERSION_ONE = 'V1';
-    const VERSION_TWO = 'V2';
+    const VERSION_ONE = 'v1';
+    const VERSION_TWO = 'v2';
 
     const LOOKUP_ENDPOINTS = [
       self::VERSION_ONE => '/api/lookup',

@@ -10,9 +10,9 @@ class QueryResponseVersionTwo extends QueryResponse
     private $id;
     private $transStatus;
     private $eci;
-    private $acsTransId;
+    private $acsTransID;
     private $dsTransID;
-    private $threeDSServerTransId;
+    private $threeDSServerTransID;
     private $authenticationValue;
     private $transStatusReason;
 
@@ -21,9 +21,9 @@ class QueryResponseVersionTwo extends QueryResponse
         $this->id = $data['id'];
         $this->transStatus = $data['transStatus'];
         $this->eci = $data['eci'];
-        $this->acsTransId = $data['acsTransId'] ?? null;
+        $this->acsTransID = $data['acsTransID'] ?? null;
         $this->dsTransID = $data['dsTransID' ?? null];
-        $this->threeDSServerTransId = $data['threeDSServerTransId'] ?? null;
+        $this->threeDSServerTransID = $data['threeDSServerTransID'] ?? null;
         $this->authenticationValue = $data['authenticationValue'] ?? null;
         $this->transStatusReason = $data['transStatusReason'] ?? null;
     }
@@ -36,9 +36,9 @@ class QueryResponseVersionTwo extends QueryResponse
             'id' => $id,
             'transStatus' => $result['transStatus'],
             'eci' => $result['eci'],
-            'acsTransId' => $result['acsTransID'] ?? null,
+            'acsTransID' => $result['acsTransID'] ?? null,
             'dsTransID' => $result['dsTransID'] ?? null,
-            'threeDSServerTransId' => $result['threeDSServerTransID'] ?? null,
+            'threeDSServerTransID' => $result['threeDSServerTransID'] ?? null,
             'authenticationValue' => $result['authenticationValue'] ?? null,
             'transStatusReason' => $result['transStatusReason'] ?? null,
         ];
@@ -57,11 +57,7 @@ class QueryResponseVersionTwo extends QueryResponse
             'xid' => $this->xid(),
             'cavv' => $this->cavv(),
             'version' => $this->version(),
-            'extra' => [
-                'transStatusReason' => $this->reasonCode(),
-                'acsTransId' => $this->acsTransId(),
-                'threeDSServerTransID' => $this->threeDsServerTransId(),
-            ],
+            'extra' => $this->extra(),
         ];
     }
 
@@ -118,9 +114,9 @@ class QueryResponseVersionTwo extends QueryResponse
         return $this->authenticationValue;
     }
 
-    public function acsTransId()
+    public function acsTransID()
     {
-        return $this->acsTransId;
+        return $this->acsTransID;
     }
 
     public function xid(): ? string
@@ -133,9 +129,9 @@ class QueryResponseVersionTwo extends QueryResponse
         return$this->transStatusReason;
     }
 
-    public function threeDsServerTransId()
+    public function threeDSServerTransID()
     {
-        return $this->threeDSServerTransId;
+        return $this->threeDSServerTransID;
     }
 
     public function version(): string
@@ -147,8 +143,8 @@ class QueryResponseVersionTwo extends QueryResponse
     {
         return [
             'transStatusReason' => $this->reasonCode(),
-            'acsTransId' => $this->acsTransId(),
-            'threeDSServerTransID' => $this->threeDsServerTransId(),
+            'acsTransId' => $this->acsTransID(),
+            'threeDSServerTransID' => $this->threeDSServerTransID(),
         ];
     }
 }
