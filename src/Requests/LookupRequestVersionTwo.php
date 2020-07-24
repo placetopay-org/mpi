@@ -66,7 +66,7 @@ class LookupRequestVersionTwo implements Request
         $this->purchaseCurrency = $data['currency'];
         $this->redirectURI = $data['redirectUrl'];
         $this->reference = $data['reference'] ?? null;
-        $this->threeDSAuthenticationInd = $data['threeDSAuthenticationInd'] ?? null;
+        $this->threeDSAuthenticationInd = $data['threeDSAuthenticationInd'] ?? '01';
 
         $this->threeDSAuthValidation($data);
 
