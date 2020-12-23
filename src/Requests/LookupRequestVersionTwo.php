@@ -58,6 +58,12 @@ class LookupRequestVersionTwo implements Request
      */
     private $recurringExpiry;
 
+    /**
+     * Load other information useful to risk management
+     * @var array
+     */
+    private $additional = [];
+
     public function __construct($data)
     {
         $this->accNumber = $data['card']['number'];
@@ -73,6 +79,8 @@ class LookupRequestVersionTwo implements Request
         $this->purchaseInstallData = $data['purchaseInstalData'] ?? null;
         $this->recurringFrequency = $data['recurringFrequency'] ?? null;
         $this->recurringExpiry = $data['recurringExpiry'] ?? null;
+
+        $this->loadAdditional($data);
     }
 
     /**
@@ -93,7 +101,7 @@ class LookupRequestVersionTwo implements Request
 
     public function toArray(): array
     {
-        return [
+        return array_merge([
             'acctNumber' => $this->accNumber,
             'cardExpiryDate' => $this->cardExpiryDate,
             'purchaseAmount' => $this->purchaseAmount,
@@ -101,7 +109,7 @@ class LookupRequestVersionTwo implements Request
             'redirectURI' => $this->redirectURI,
             'threeDSAuthenticationInd' => $this->threeDSAuthenticationInd,
             'reference' => $this->reference,
-        ];
+        ], $this->additional);
     }
 
     public function endpoint(): string
@@ -126,6 +134,48 @@ class LookupRequestVersionTwo implements Request
 
             if ($this->threeDSAuthenticationInd == '03' && !isset($data['recurringFrequency'])) {
                 throw new MPIException("The purchase instal data field is required when three d s authentication ind is {$this->threeDSAuthenticationInd}.");
+            }
+        }
+    }
+
+    private function loadAdditional(array $data)
+    {
+        if ($payer = $data['payer']) {
+            $name = trim(($payer['name'] ?? '') . ' ' . ($payer['surname'] ?? ''));
+            $this->additional = array_merge($this->additional, [
+                'email' => $payer['email'] ?? null,
+                'mobilePhone' => [
+                    'cc' => null,
+                    'subscriber' => $payer['mobile'] ?? null,
+                ],
+                'cardholderName' => $name,
+            ]);
+
+            if ($address = $payer['address'] ?? []) {
+                $this->additional = array_merge($this->additional, [
+                    'billAddrCity' => $address['city'] ?? null,
+                    'billAddrCountry' => $address['country'] ?? null,
+                    'billAddrLine1' => $address['street'] ?? null,
+                    'billAddrPostCode' => $address['postalCode'] ?? null,
+                    'billAddrState' => $address['state'] ?? null,
+                ]);
+            }
+        }
+
+        $shipping = $data['buyer'];
+        if ($data['shipping']) {
+            $shipping = $data['shipping'];
+        }
+
+        if ($shipping) {
+            if ($address = $shipping['address'] ?? []) {
+                $this->additional = array_merge($this->additional, [
+                    'shipAddrCity' => $address['city'] ?? null,
+                    'shipAddrCountry' => $address['country'] ?? null,
+                    'shipAddrLine1' => $address['street'] ?? null,
+                    'shipAddrPostCode' => $address['postalCode'] ?? null,
+                    'shipAddrState' => $address['state'] ?? null,
+                ]);
             }
         }
     }
