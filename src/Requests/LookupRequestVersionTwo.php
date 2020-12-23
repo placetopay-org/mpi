@@ -140,7 +140,7 @@ class LookupRequestVersionTwo implements Request
 
     private function loadAdditional(array $data)
     {
-        if ($payer = $data['payer']) {
+        if ($payer = $data['payer'] ?? []) {
             $name = trim(($payer['name'] ?? '') . ' ' . ($payer['surname'] ?? ''));
             $this->additional = array_merge($this->additional, [
                 'email' => $payer['email'] ?? null,
@@ -162,8 +162,8 @@ class LookupRequestVersionTwo implements Request
             }
         }
 
-        $shipping = $data['buyer'];
-        if ($data['shipping']) {
+        $shipping = $data['buyer'] ?? [];
+        if ($data['shipping'] ?? []) {
             $shipping = $data['shipping'];
         }
 
