@@ -59,7 +59,7 @@ class LookupRequestVersionTwo implements Request
     private $recurringExpiry;
 
     /**
-     * Load other information useful to risk management
+     * Load other information useful to risk management.
      * @var array
      */
     private $additional = [];
