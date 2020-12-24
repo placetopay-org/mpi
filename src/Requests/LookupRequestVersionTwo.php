@@ -101,7 +101,7 @@ class LookupRequestVersionTwo implements Request
 
     public function toArray(): array
     {
-        return array_merge([
+        return array_filter(array_merge([
             'acctNumber' => $this->accNumber,
             'cardExpiryDate' => $this->cardExpiryDate,
             'purchaseAmount' => $this->purchaseAmount,
@@ -109,7 +109,7 @@ class LookupRequestVersionTwo implements Request
             'redirectURI' => $this->redirectURI,
             'threeDSAuthenticationInd' => $this->threeDSAuthenticationInd,
             'reference' => $this->reference,
-        ], $this->additional);
+        ], $this->additional));
     }
 
     public function endpoint(): string
