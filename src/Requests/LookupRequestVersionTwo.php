@@ -144,10 +144,7 @@ class LookupRequestVersionTwo implements Request
             $name = trim(($payer['name'] ?? '') . ' ' . ($payer['surname'] ?? ''));
             $this->additional = array_merge($this->additional, [
                 'email' => $payer['email'] ?? null,
-                'mobilePhone' => [
-                    'cc' => null,
-                    'subscriber' => $payer['mobile'] ?? null,
-                ],
+                'mobilePhone' => $data['mobile'] ?? null,
                 'cardholderName' => $name,
             ]);
 
