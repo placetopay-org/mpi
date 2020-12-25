@@ -141,11 +141,10 @@ class LookupRequestVersionTwo implements Request
     private function loadAdditional(array $data)
     {
         if ($payer = $data['payer'] ?? []) {
-            $name = trim(($payer['name'] ?? '') . ' ' . ($payer['surname'] ?? ''));
             $this->additional = array_merge($this->additional, [
                 'email' => $payer['email'] ?? null,
                 'mobilePhone' => $data['mobile'] ?? null,
-                'cardholderName' => $name,
+                'cardholderName' => $payer['name'] ?? null,
             ]);
 
             if ($address = $payer['address'] ?? []) {
