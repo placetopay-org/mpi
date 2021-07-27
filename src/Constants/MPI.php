@@ -20,6 +20,9 @@ interface MPI
     const PAYMENT_TRANSACTION_CODE = '01';
     const RECURRING_TRANSACTION_CODE = '02';
     const INSTALLMENT_TRANSACTION_CODE = '03';
+    const ADD_NEW_CARD_CODE = '04';
+    const KEEP_A_CARD_CODE = '05';
+    const VERIFY_CARD_FROM_EMV_TOKEN = '06';
 
     const THREEDS_AUTH_INDICATOR = [
         self::RECURRING_TRANSACTION_CODE,
