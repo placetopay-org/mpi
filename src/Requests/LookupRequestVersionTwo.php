@@ -44,6 +44,11 @@ class LookupRequestVersionTwo implements Request
     private $threeDSAuthenticationInd;
 
     /**
+     * @var string
+     */
+    private $messageCategory;
+
+    /**
      * @var string|null
      */
     private $purchaseInstallData;
@@ -66,17 +71,23 @@ class LookupRequestVersionTwo implements Request
 
     public function __construct($data)
     {
+        if (!empty($data['currency'])) {
+            $this->purchaseAmount = $data['amount'];
+            $this->purchaseCurrency = $data['currency'];
+            $this->threeDSAuthenticationInd = $data['threeDSAuthenticationInd'] ?? MPI::PAYMENT_TRANSACTION_CODE;
+        } else {
+            $this->messageCategory = '02';
+            $this->threeDSAuthenticationInd = $data['threeDSAuthenticationInd'] ?? MPI::ADD_NEW_CARD_CODE;
+        }
+
         $this->accNumber = $data['card']['number'];
         $this->cardExpiryDate = $this->expirationYearShort($data['card']['expirationYear']) . $data['card']['expirationMonth'];
-        $this->purchaseAmount = $data['amount'];
-        $this->purchaseCurrency = $data['currency'];
         $this->redirectURI = $data['redirectUrl'];
         $this->reference = $data['reference'] ?? null;
-        $this->threeDSAuthenticationInd = $data['threeDSAuthenticationInd'] ?? '01';
 
         $this->threeDSAuthValidation($data);
 
-        $this->purchaseInstallData = $data['purchaseInstalData'] ?? null;
+        $this->purchaseInstallData = $data['purchaseInstallData'] ?? null;
         $this->recurringFrequency = $data['recurringFrequency'] ?? null;
         $this->recurringExpiry = $data['recurringExpiry'] ?? null;
 
@@ -109,12 +120,22 @@ class LookupRequestVersionTwo implements Request
             'redirectURI' => $this->redirectURI,
             'threeDSAuthenticationInd' => $this->threeDSAuthenticationInd,
             'reference' => $this->reference,
+            'messageCategory' => $this->messageCategory(),
+
+            'purchaseInstallData' => $this->purchaseInstallData,
+            'recurringFrequency' => $this->recurringFrequency,
+            'recurringExpiry' => $this->recurringExpiry,
         ], $this->additional));
     }
 
     public function endpoint(): string
     {
         return MPI::LOOKUP_ENDPOINTS[MPI::VERSION_TWO];
+    }
+
+    public function messageCategory()
+    {
+        return $this->messageCategory;
     }
 
     /**
