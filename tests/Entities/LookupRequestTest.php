@@ -2,8 +2,6 @@
 
 namespace PlacetoPay\MPI\Tests\Entities;
 
-use PlacetoPay\MPI\Messages\LookupResponseVersionOne;
-use PlacetoPay\MPI\Requests\LookupRequestVersionOne;
 use PlacetoPay\MPI\Requests\LookupRequestVersionTwo;
 use PlacetoPay\MPI\Tests\BaseTestCase;
 
