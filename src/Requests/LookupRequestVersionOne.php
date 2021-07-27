@@ -64,7 +64,7 @@ class LookupRequestVersionOne implements Request
         $this->expiration_month = $data['card']['expirationMonth'];
         $this->amount = $data['amount'];
         $this->reference = $data['reference'] ?? null;
-        $this->currency = $data['currency'];
+        $this->currency = $data['currency'] ?? null;
         $this->redirect_uri = $data['redirectUrl'];
         $this->disable_redirect = isset($data['disableRedirect']) ? $data['disableRedirect'] : false;
         $this->installments = isset($data['card']['installments']) ? $data['card']['installments'] : null;
