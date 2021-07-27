@@ -2,11 +2,47 @@
 
 namespace PlacetoPay\MPI\Tests\Entities;
 
+use PlacetoPay\MPI\Requests\LookupRequestVersionOne;
 use PlacetoPay\MPI\Requests\LookupRequestVersionTwo;
 use PlacetoPay\MPI\Tests\BaseTestCase;
 
 class LookupRequestTest extends BaseTestCase
 {
+    public function testItHandlesARequestOnVersionOne()
+    {
+        $data = [
+            'payer' => [
+                'name' => 'Diego',
+                'surname' => 'Calle',
+            ],
+            'card' => [
+                'number' => '4111111111111111',
+                'expirationYear' => '2021',
+                'expirationMonth' => '08',
+            ],
+            'amount' => null,
+            'reference' => 'TEST_REFERENCE',
+            'currency' => null,
+            'redirectUrl' => 'https://dnetix.co/ping',
+            'disableRedirect' => false,
+            'userAgent' => 'Mozilla Firefox all the other things here 3.583',
+        ];
+
+        $request = new LookupRequestVersionOne($data);
+
+        $this->assertEquals([
+            'locale' => 'en',
+            'pan' => '4111111111111111',
+            'expiration_year' => '2021',
+            'expiration_month' => '08',
+            'amount' => 1,
+            'reference' => 'TEST_REFERENCE',
+            'currency' => 'USD',
+            'redirect_uri' => 'https://dnetix.co/ping',
+            'disable_redirect' => false,
+        ], $request->toArray());
+    }
+
     public function testItParsesSuccessfullyARequest()
     {
         $data = [
