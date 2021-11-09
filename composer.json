@@ -36,8 +36,7 @@
     "symfony/var-dumper": "^4.1"
   },
   "scripts": {
-    "phpcs": "phpcs --standard=PSR2 --ignore=tests/coverage src/ tests/",
-    "phpstan": "phpstan analyse -l 1 src/ tests/",
+    "phpcs": "vendor/bin/php-cs-fixer fix --config=.php-cs-fixer.php",
     "phpunit": "phpunit --bootstrap vendor/autoload.php --verbose --testdox tests/",
     "test": [
       "@phpcs",
