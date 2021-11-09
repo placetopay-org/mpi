@@ -15,6 +15,7 @@ class QueryResponseVersionTwo extends QueryResponse
     private $threeDSServerTransID;
     private $authenticationValue;
     private $transStatusReason;
+    private $enrolled;
 
     public function __construct(array $data)
     {
@@ -26,6 +27,7 @@ class QueryResponseVersionTwo extends QueryResponse
         $this->threeDSServerTransID = $data['threeDSServerTransID'] ?? null;
         $this->authenticationValue = $data['authenticationValue'] ?? null;
         $this->transStatusReason = $data['transStatusReason'] ?? null;
+        $this->enrolled = $data['enrolled'] ?? null;
     }
 
     public static function loadFromResult($result, $id = null)
@@ -34,6 +36,7 @@ class QueryResponseVersionTwo extends QueryResponse
 
         $data = [
             'id' => $id,
+            'enrolled' => $result['enrolled'] ?? 'Y',
             'transStatus' => $result['transStatus'],
             'eci' => $result['eci'],
             'acsTransID' => $result['acsTransID'] ?? null,
@@ -50,7 +53,7 @@ class QueryResponseVersionTwo extends QueryResponse
     {
         return [
             'id' => $this->id(),
-            'enrolled' => 'Y',
+            'enrolled' => $this->enrolled(),
             'authenticated' => $this->authenticated(),
             'validSignature' => true,
             'eci' => $this->eci(),
@@ -137,6 +140,11 @@ class QueryResponseVersionTwo extends QueryResponse
     public function version(): string
     {
         return MPI::VERSION_TWO;
+    }
+
+    public function enrolled(): ?string
+    {
+        return $this->enrolled;
     }
 
     public function extra(): array
