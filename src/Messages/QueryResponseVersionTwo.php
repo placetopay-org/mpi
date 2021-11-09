@@ -30,40 +30,6 @@ class QueryResponseVersionTwo extends QueryResponse
         $this->enrolled = $data['enrolled'] ?? null;
     }
 
-    public static function loadFromResult($result, $id = null)
-    {
-        parent::loadFromResult($result);
-
-        $data = [
-            'id' => $id,
-            'enrolled' => $result['enrolled'] ?? 'Y',
-            'transStatus' => $result['transStatus'],
-            'eci' => $result['eci'],
-            'acsTransID' => $result['acsTransID'] ?? null,
-            'dsTransID' => $result['dsTransID'] ?? null,
-            'threeDSServerTransID' => $result['threeDSServerTransID'] ?? null,
-            'authenticationValue' => $result['authenticationValue'] ?? null,
-            'transStatusReason' => $result['transStatusReason'] ?? null,
-        ];
-
-        return new self($data);
-    }
-
-    public function toArray()
-    {
-        return [
-            'id' => $this->id(),
-            'enrolled' => $this->enrolled(),
-            'authenticated' => $this->authenticated(),
-            'validSignature' => true,
-            'eci' => $this->eci(),
-            'xid' => $this->xid(),
-            'cavv' => $this->cavv(),
-            'version' => $this->version(),
-            'extra' => $this->extra(),
-        ];
-    }
-
     public function id()
     {
         return $this->id;
@@ -76,6 +42,11 @@ class QueryResponseVersionTwo extends QueryResponse
     public function isAuthenticated(): bool
     {
         return $this->authenticated() == 'Y' && $this->cavv();
+    }
+
+    public function enrolled(): ?string
+    {
+        return $this->enrolled;
     }
 
     /**
@@ -142,11 +113,6 @@ class QueryResponseVersionTwo extends QueryResponse
         return MPI::VERSION_TWO;
     }
 
-    public function enrolled(): ?string
-    {
-        return $this->enrolled;
-    }
-
     public function extra(): array
     {
         return [
@@ -154,5 +120,39 @@ class QueryResponseVersionTwo extends QueryResponse
             'acsTransId' => $this->acsTransID(),
             'threeDSServerTransID' => $this->threeDSServerTransID(),
         ];
+    }
+
+    public function toArray()
+    {
+        return [
+            'id' => $this->id(),
+            'enrolled' => $this->enrolled(),
+            'authenticated' => $this->authenticated(),
+            'validSignature' => true,
+            'eci' => $this->eci(),
+            'xid' => $this->xid(),
+            'cavv' => $this->cavv(),
+            'version' => $this->version(),
+            'extra' => $this->extra(),
+        ];
+    }
+
+    public static function loadFromResult($result, $id = null)
+    {
+        parent::loadFromResult($result);
+
+        $data = [
+            'id' => $id,
+            'enrolled' => $result['enrolled'] ?? 'Y',
+            'transStatus' => $result['transStatus'],
+            'eci' => $result['eci'],
+            'acsTransID' => $result['acsTransID'] ?? null,
+            'dsTransID' => $result['dsTransID'] ?? null,
+            'threeDSServerTransID' => $result['threeDSServerTransID'] ?? null,
+            'authenticationValue' => $result['authenticationValue'] ?? null,
+            'transStatusReason' => $result['transStatusReason'] ?? null,
+        ];
+
+        return new self($data);
     }
 }

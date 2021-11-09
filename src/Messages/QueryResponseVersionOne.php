@@ -38,6 +38,11 @@ class QueryResponseVersionOne extends QueryResponse
         return $this->authenticated() == 'Y' && $this->validSignature();
     }
 
+    public function enrolled(): ?string
+    {
+        return 'Y';
+    }
+
     /**
      * Returns the indicator for the authentication from the ACS
      *  “Y” - Successful Authentication
@@ -97,7 +102,7 @@ class QueryResponseVersionOne extends QueryResponse
     {
         return [
             'id' => $this->id(),
-            'enrolled' => 'Y',
+            'enrolled' => $this->enrolled(),
             'authenticated' => $this->authenticated(),
             'validSignature' => $this->validSignature(),
             'eci' => $this->eci(),
