@@ -46,7 +46,7 @@ class QueryResponseVersionOne extends QueryResponse
      *  “U” - Unable to Authenticate.
      * @return string
      */
-    public function authenticated(): string
+    public function authenticated(): ?string
     {
         return $this->authenticated;
     }

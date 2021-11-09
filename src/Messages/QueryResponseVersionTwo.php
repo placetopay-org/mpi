@@ -87,7 +87,7 @@ class QueryResponseVersionTwo extends QueryResponse
      *  ”I” - Challenge Required only informative.
      * @return string
      */
-    public function authenticated(): string
+    public function authenticated(): ?string
     {
         return $this->transStatus;
     }
