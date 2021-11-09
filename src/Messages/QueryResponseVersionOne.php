@@ -46,7 +46,7 @@ class QueryResponseVersionOne extends QueryResponse
      *  “U” - Unable to Authenticate.
      * @return string
      */
-    public function authenticated(): string
+    public function authenticated(): ?string
     {
         return $this->authenticated;
     }
@@ -76,7 +76,7 @@ class QueryResponseVersionOne extends QueryResponse
     /**
      * Cardholder Authentication Verification Value (CAVV).
      */
-    public function cavv(): ? string
+    public function cavv(): ?string
     {
         return $this->cavv;
     }
@@ -85,7 +85,7 @@ class QueryResponseVersionOne extends QueryResponse
      * Identifier of the resulting transaction for the authentication process.
      * @return mixed
      */
-    public function xid(): ? string
+    public function xid(): ?string
     {
         return $this->xid;
     }
