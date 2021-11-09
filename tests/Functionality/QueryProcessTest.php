@@ -102,7 +102,33 @@ class QueryProcessTest extends BaseTestCase
         ]);
 
         $response = $mpi->query(2);
+        $this->assertEquals('Y', $response->toArray()['enrolled']);
         $this->assertFalse($response->isAuthenticated());
         $this->assertEquals('U', $response->authenticated());
+    }
+
+    public function testItHandlesTheNewQueryResponseOnV2()
+    {
+        $mpi = $this->create([
+            '3dsVersion' => MPI::VERSION_TWO,
+            'client' => new \PlacetoPay\MPI\Clients\MockClientVersionTwo(),
+        ]);
+
+        $response = $mpi->query(7);
+        $this->assertEquals('Y', $response->enrolled());
+        $this->assertTrue($response->isAuthenticated());
+        $this->assertEquals('Y', $response->authenticated());
+    }
+
+    public function testItHandlesANonEnrolledInsteadOfError()
+    {
+        $mpi = $this->create([
+            '3dsVersion' => MPI::VERSION_TWO,
+            'client' => new \PlacetoPay\MPI\Clients\MockClientVersionTwo(),
+        ]);
+
+        $response = $mpi->query(8);
+        $this->assertEquals('N', $response->enrolled());
+        $this->assertNull($response->authenticated());
     }
 }

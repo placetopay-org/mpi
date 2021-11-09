@@ -102,7 +102,7 @@ class QueryResponseVersionOne extends QueryResponse
     {
         return [
             'id' => $this->id(),
-            'enrolled' => 'Y',
+            'enrolled' => $this->enrolled(),
             'authenticated' => $this->authenticated(),
             'validSignature' => $this->validSignature(),
             'eci' => $this->eci(),

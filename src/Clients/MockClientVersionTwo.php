@@ -147,6 +147,32 @@ class MockClientVersionTwo implements MPIClient
                         'threeDSServerTransID' => 'b5723933-f822-43af-b82f-b48b4983da81',
                         'authenticationValue' => 'AAABBZEEBgAAAAAAAAQGAAAAAAA=',
                     ];
+                case 7:
+                    return [
+                        'enrolled' => null,
+                        'transStatus' => 'Y',
+                        'transStatusReason' => null,
+                        'eci' => '05',
+                        'acsTransID' => '173f9515-41b3-4cfc-a9a4-5d8c839faad6',
+                        'dsTransID' => '5fd81313-e21c-4018-b049-5c2e2a9a527d',
+                        'threeDSServerTransID' => '3ed1f41b-30bc-435b-90eb-40028a57d4ea',
+                        'sdkTransID' => null,
+                        'authenticationValue' => 'AAEBBViWAgAABJPghAMTdUeHIJE=',
+                        'messageVersion' => '2.2.0',
+                    ];
+                case 8:
+                    return [
+                        'enrolled' => 'N',
+                        'transStatus' => null,
+                        'transStatusReason' => null,
+                        'eci' => '00',
+                        'acsTransID' => null,
+                        'dsTransID' => null,
+                        'threeDSServerTransID' => '6063ae4f-a3f2-466e-926c-f568b17ace44',
+                        'sdkTransID' => null,
+                        'authenticationValue' => null,
+                        'messageVersion' => '2.1.0',
+                    ];
             }
         }
 
