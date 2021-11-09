@@ -6,3 +6,6 @@ packages
 .DS_Store
 .phpunit.result.cache
 .php_cs.cache
+/infection.json.dist
+composer.lock
+.php-cs-fixer.cache
