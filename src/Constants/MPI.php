@@ -4,27 +4,27 @@ namespace PlacetoPay\MPI\Constants;
 
 interface MPI
 {
-    const VERSION_ONE = 'v1';
-    const VERSION_TWO = 'v2';
+    public const VERSION_ONE = 'v1';
+    public const VERSION_TWO = 'v2';
 
-    const LOOKUP_ENDPOINTS = [
+    public const LOOKUP_ENDPOINTS = [
       self::VERSION_ONE => '/api/lookup',
       self::VERSION_TWO => '/api/threeds/v2/sessions',
     ];
 
-    const QUERY_ENDPOINTS = [
+    public const QUERY_ENDPOINTS = [
         self::VERSION_ONE => '/api/transactions/',
         self::VERSION_TWO => '/api/threeds/v2/transactions/',
     ];
 
-    const PAYMENT_TRANSACTION_CODE = '01';
-    const RECURRING_TRANSACTION_CODE = '02';
-    const INSTALLMENT_TRANSACTION_CODE = '03';
-    const ADD_NEW_CARD_CODE = '04';
-    const KEEP_A_CARD_CODE = '05';
-    const VERIFY_CARD_FROM_EMV_TOKEN = '06';
+    public const PAYMENT_TRANSACTION_CODE = '01';
+    public const RECURRING_TRANSACTION_CODE = '02';
+    public const INSTALLMENT_TRANSACTION_CODE = '03';
+    public const ADD_NEW_CARD_CODE = '04';
+    public const KEEP_A_CARD_CODE = '05';
+    public const VERIFY_CARD_FROM_EMV_TOKEN = '06';
 
-    const THREEDS_AUTH_INDICATOR = [
+    public const THREEDS_AUTH_INDICATOR = [
         self::RECURRING_TRANSACTION_CODE,
         self::INSTALLMENT_TRANSACTION_CODE,
     ];

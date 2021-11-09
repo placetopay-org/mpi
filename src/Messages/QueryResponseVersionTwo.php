@@ -119,7 +119,7 @@ class QueryResponseVersionTwo extends QueryResponse
         return $this->acsTransID;
     }
 
-    public function xid(): ? string
+    public function xid(): ?string
     {
         return $this->dsTransID;
     }
