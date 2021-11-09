@@ -10,6 +10,8 @@ abstract class QueryResponse extends MPIBaseMessage
 
     abstract public function isAuthenticated(): bool;
 
+    abstract public function enrolled(): ?string;
+
     abstract public function authenticated(): ?string;
 
     abstract public function eci(): string;
