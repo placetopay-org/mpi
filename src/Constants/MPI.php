@@ -14,7 +14,7 @@ interface MPI
 
     public const QUERY_ENDPOINTS = [
         self::VERSION_ONE => '/api/transactions/',
-        self::VERSION_TWO => '/api/threeds/v2/transactions/',
+        self::VERSION_TWO => '/api/v2/transactions/',
     ];
 
     public const PAYMENT_TRANSACTION_CODE = '01';
