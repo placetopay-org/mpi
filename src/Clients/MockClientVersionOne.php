@@ -2,11 +2,13 @@
 
 namespace PlacetoPay\MPI\Clients;
 
+use PlacetoPay\MPI\Contracts\MockClientBase;
 use PlacetoPay\MPI\Contracts\MPIClient;
 use PlacetoPay\MPI\Contracts\MPIException;
 
 class MockClientVersionOne implements MPIClient
 {
+    use MockClientBase;
     /**
      * Performs a HTTP request and returns the information on array.
      * @param $url

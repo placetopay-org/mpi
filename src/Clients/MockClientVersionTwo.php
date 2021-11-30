@@ -3,17 +3,28 @@
 namespace PlacetoPay\MPI\Clients;
 
 use PlacetoPay\MPI\Constants\MPI;
+use PlacetoPay\MPI\Contracts\MockClientBase;
 use PlacetoPay\MPI\Contracts\MPIClient;
 use PlacetoPay\MPI\Contracts\MPIException;
 
 class MockClientVersionTwo implements MPIClient
 {
+    use MockClientBase;
+
+    protected ?string $url = null;
+    protected ?string $method = null;
+    protected ?array $data = null;
+
     /**
      * {@inheritdoc}
      * @throws MPIException
      */
     public function execute($url, $method, $data, $headers)
     {
+        $this->url = $url;
+        $this->method = $method;
+        $this->data = $data;
+
         if (strpos($url, MPI::LOOKUP_ENDPOINTS[MPI::VERSION_TWO]) !== false) {
             return $this->lookup($url, $method, $data);
         } else {
@@ -45,7 +56,7 @@ class MockClientVersionTwo implements MPIClient
             case '4532840681197602':
                 return [
                     'sessionToken' => rand(60, 60),
-                    'redirectURL' => $data['redirectURI'],
+                    'redirectURL' => 'https://dnetix.co/ping/3ds',
                     'transactionID' => substr($data['cardExpiryDate'], -2),
                 ];
                 break;
@@ -76,6 +87,12 @@ class MockClientVersionTwo implements MPIClient
                     ],
                 ];
                 break;
+            default:
+                return [
+                    'sessionToken' => rand(60, 60),
+                    'redirectURL' => 'https://dnetix.co/ping/3ds',
+                    'transactionID' => substr($data['cardExpiryDate'], -2),
+                ];
         }
     }
 
@@ -229,5 +246,20 @@ class MockClientVersionTwo implements MPIClient
                 'brand' => 'visa',
             ],
         ];
+    }
+
+    public function lastUrl(): ?string
+    {
+        return $this->url;
+    }
+
+    public function lastMethod(): ?string
+    {
+        return $this->method;
+    }
+
+    public function lastData(): ?array
+    {
+        return $this->data;
     }
 }

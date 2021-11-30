@@ -13,7 +13,7 @@ class QueryProcessTest extends BaseTestCase
         return new MPIService(array_merge([
             'url' => getenv('MPI_URL'),
             'apiKey' => getenv('MPI_API_KEY'),
-            'client' => new \PlacetoPay\MPI\Clients\MockClientVersionOne(),
+            'client' => \PlacetoPay\MPI\Clients\MockClientVersionOne::instance(),
         ], $overwrite));
     }
 
@@ -78,7 +78,7 @@ class QueryProcessTest extends BaseTestCase
     {
         $mpi = $this->create([
             '3dsVersion' => MPI::VERSION_TWO,
-            'client' => new \PlacetoPay\MPI\Clients\MockClientVersionTwo(),
+            'client' => \PlacetoPay\MPI\Clients\MockClientVersionTwo::instance(),
         ]);
 
         $response = $mpi->query(1);
@@ -98,7 +98,7 @@ class QueryProcessTest extends BaseTestCase
     {
         $mpi = $this->create([
             '3dsVersion' => MPI::VERSION_TWO,
-            'client' => new \PlacetoPay\MPI\Clients\MockClientVersionTwo(),
+            'client' => \PlacetoPay\MPI\Clients\MockClientVersionTwo::instance(),
         ]);
 
         $response = $mpi->query(2);
@@ -111,7 +111,7 @@ class QueryProcessTest extends BaseTestCase
     {
         $mpi = $this->create([
             '3dsVersion' => MPI::VERSION_TWO,
-            'client' => new \PlacetoPay\MPI\Clients\MockClientVersionTwo(),
+            'client' => \PlacetoPay\MPI\Clients\MockClientVersionTwo::instance(),
         ]);
 
         $response = $mpi->query(7);
@@ -124,7 +124,7 @@ class QueryProcessTest extends BaseTestCase
     {
         $mpi = $this->create([
             '3dsVersion' => MPI::VERSION_TWO,
-            'client' => new \PlacetoPay\MPI\Clients\MockClientVersionTwo(),
+            'client' => \PlacetoPay\MPI\Clients\MockClientVersionTwo::instance(),
         ]);
 
         $response = $mpi->query(8);

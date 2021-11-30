@@ -2,6 +2,7 @@
 
 namespace PlacetoPay\MPI\Tests\Functionality;
 
+use PlacetoPay\MPI\Clients\MockClientVersionTwo;
 use PlacetoPay\MPI\Constants\MPI;
 use PlacetoPay\MPI\Contracts\MPIException;
 use PlacetoPay\MPI\Exceptions\ErrorResultMPI;
@@ -16,7 +17,7 @@ class LookUpProcessTest extends BaseTestCase
         return new MPIService(array_merge([
             'url' => getenv('MPI_URL'),
             'apiKey' => getenv('MPI_API_KEY'),
-            'client' => new \PlacetoPay\MPI\Clients\MockClientVersionOne(),
+            'client' => \PlacetoPay\MPI\Clients\MockClientVersionOne::instance(),
         ], $overwrite));
     }
 
@@ -174,7 +175,7 @@ class LookUpProcessTest extends BaseTestCase
     {
         $mpi = $this->create([
             '3dsVersion' => MPI::VERSION_TWO,
-            'client' => new \PlacetoPay\MPI\Clients\MockClientVersionTwo(),
+            'client' => \PlacetoPay\MPI\Clients\MockClientVersionTwo::instance(),
         ]);
 
         $response = $mpi->lookUp([
@@ -191,13 +192,15 @@ class LookUpProcessTest extends BaseTestCase
         $this->assertInstanceOf(LookupResponseVersionTwo::class, $response);
         $this->assertTrue($response->canAuthenticate());
         $this->assertEquals('https://dnetix.co/ping/3ds', $response->processUrl());
+
+        $this->assertEquals('COP', MockClientVersionTwo::instance()->lastData()['purchaseCurrency']);
     }
 
     public function testThrowExceptionItInvalidResponse()
     {
         $mpi = $this->create([
             '3dsVersion' => MPI::VERSION_TWO,
-            'client' => new \PlacetoPay\MPI\Clients\MockClientVersionTwo(),
+            'client' => \PlacetoPay\MPI\Clients\MockClientVersionTwo::instance(),
         ]);
 
         $this->expectException(ErrorResultMPI::class);
@@ -217,7 +220,7 @@ class LookUpProcessTest extends BaseTestCase
     {
         $mpi = $this->create([
             '3dsVersion' => MPI::VERSION_TWO,
-            'client' => new \PlacetoPay\MPI\Clients\MockClientVersionTwo(),
+            'client' => \PlacetoPay\MPI\Clients\MockClientVersionTwo::instance(),
         ]);
 
         $this->expectException(MPIException::class);
@@ -239,7 +242,7 @@ class LookUpProcessTest extends BaseTestCase
     {
         $mpi = $this->create([
             '3dsVersion' => MPI::VERSION_TWO,
-            'client' => new \PlacetoPay\MPI\Clients\MockClientVersionTwo(),
+            'client' => \PlacetoPay\MPI\Clients\MockClientVersionTwo::instance(),
         ]);
 
         $this->expectException(MPIException::class);
