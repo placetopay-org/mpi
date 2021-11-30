@@ -3,17 +3,28 @@
 namespace PlacetoPay\MPI\Clients;
 
 use PlacetoPay\MPI\Constants\MPI;
+use PlacetoPay\MPI\Contracts\MockClientBase;
 use PlacetoPay\MPI\Contracts\MPIClient;
 use PlacetoPay\MPI\Contracts\MPIException;
 
 class MockClientVersionTwo implements MPIClient
 {
+    use MockClientBase;
+
+    protected ?string $url;
+    protected ?string $method;
+    protected ?array $data;
+
     /**
      * {@inheritdoc}
      * @throws MPIException
      */
     public function execute($url, $method, $data, $headers)
     {
+        $this->url = $url;
+        $this->method = $method;
+        $this->data = $data;
+
         if (strpos($url, MPI::LOOKUP_ENDPOINTS[MPI::VERSION_TWO]) !== false) {
             return $this->lookup($url, $method, $data);
         } else {
@@ -229,5 +240,20 @@ class MockClientVersionTwo implements MPIClient
                 'brand' => 'visa',
             ],
         ];
+    }
+
+    public function lastUrl(): ?string
+    {
+        return $this->url;
+    }
+
+    public function lastMethod(): ?string
+    {
+        return $this->method;
+    }
+
+    public function lastData(): ?array
+    {
+        return $this->data;
     }
 }
