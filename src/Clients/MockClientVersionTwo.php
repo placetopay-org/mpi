@@ -11,9 +11,9 @@ class MockClientVersionTwo implements MPIClient
 {
     use MockClientBase;
 
-    protected ?string $url;
-    protected ?string $method;
-    protected ?array $data;
+    protected ?string $url = null;
+    protected ?string $method = null;
+    protected ?array $data = null;
 
     /**
      * {@inheritdoc}
@@ -56,7 +56,7 @@ class MockClientVersionTwo implements MPIClient
             case '4532840681197602':
                 return [
                     'sessionToken' => rand(60, 60),
-                    'redirectURL' => $data['redirectURI'],
+                    'redirectURL' => 'https://dnetix.co/ping/3ds',
                     'transactionID' => substr($data['cardExpiryDate'], -2),
                 ];
                 break;
@@ -87,6 +87,12 @@ class MockClientVersionTwo implements MPIClient
                     ],
                 ];
                 break;
+            default:
+                return [
+                    'sessionToken' => rand(60, 60),
+                    'redirectURL' => 'https://dnetix.co/ping/3ds',
+                    'transactionID' => substr($data['cardExpiryDate'], -2),
+                ];
         }
     }
 
