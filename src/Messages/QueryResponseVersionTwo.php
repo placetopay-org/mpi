@@ -115,27 +115,17 @@ class QueryResponseVersionTwo extends QueryResponse
         return $this->version;
     }
 
+    public function validSignature(): bool
+    {
+        return true;
+    }
+
     public function extra(): array
     {
         return [
             'transStatusReason' => $this->reasonCode(),
             'acsTransId' => $this->acsTransID(),
             'threeDSServerTransID' => $this->threeDSServerTransID(),
-        ];
-    }
-
-    public function toArray()
-    {
-        return [
-            'id' => $this->id(),
-            'enrolled' => $this->enrolled(),
-            'authenticated' => $this->authenticated(),
-            'validSignature' => true,
-            'eci' => $this->eci(),
-            'xid' => $this->xid(),
-            'cavv' => $this->cavv(),
-            'version' => $this->version(),
-            'extra' => $this->extra(),
         ];
     }
 

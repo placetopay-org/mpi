@@ -60,7 +60,7 @@ class QueryResponseVersionOne extends QueryResponse
      * Return true if the signature for the ACS response has been validated.
      * @return bool
      */
-    public function validSignature()
+    public function validSignature(): bool
     {
         return $this->validSignature;
     }
@@ -93,23 +93,6 @@ class QueryResponseVersionOne extends QueryResponse
     public function xid(): ?string
     {
         return $this->xid;
-    }
-
-    /**
-     * Returns this information as array to store it.
-     */
-    public function toArray()
-    {
-        return [
-            'id' => $this->id(),
-            'enrolled' => $this->enrolled(),
-            'authenticated' => $this->authenticated(),
-            'validSignature' => $this->validSignature(),
-            'eci' => $this->eci(),
-            'cavv' => $this->cavv(),
-            'xid' => $this->xid(),
-            'version' => $this->version(),
-        ];
     }
 
     /**
