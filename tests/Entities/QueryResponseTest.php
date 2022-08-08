@@ -2,7 +2,9 @@
 
 namespace PlacetoPay\MPI\Tests\Entities;
 
+use PlacetoPay\MPI\Constants\MPI;
 use PlacetoPay\MPI\Messages\QueryResponseVersionOne;
+use PlacetoPay\MPI\Messages\QueryResponseVersionTwo;
 use PlacetoPay\MPI\Tests\BaseTestCase;
 
 class QueryResponseTest extends BaseTestCase
@@ -30,5 +32,27 @@ class QueryResponseTest extends BaseTestCase
         $this->assertEquals('05', $response->eci());
         $this->assertEquals('AAACA1aTWUhYcxeGg5NZEAAAEAA=', $response->cavv());
         $this->assertEquals('UbRrlDARTXFT8GVALigF4MDyhkk=', $response->xid());
+    }
+
+    public function testItHandlesADowngrade()
+    {
+        $data = [
+            'enrolled' => null,
+            'transStatus' => 'N',
+            'transStatusReason' => null,
+            'eci' => '07',
+            'acsTransID' => null,
+            'dsTransID' => 'MDAwMDAwMDAwMDAwMDAwMjg0MDc=',
+            'threeDSServerTransID' => null,
+            'sdkTransID' => null,
+            'authenticationValue' => 'AAABBUFwkAAAAAAQOHCQAAAAAAA=',
+            'messageVersion' => '1.0.2',
+        ];
+        $response = QueryResponseVersionTwo::loadFromResult($data, 12345);
+
+        $this->assertEquals(MPI::VERSION_ONE, $response->version());
+        $this->assertEquals('MDAwMDAwMDAwMDAwMDAwMjg0MDc=', $response->xid());
+        $this->assertEquals('N', $response->authenticated());
+        $this->assertEquals('07', $response->eci());
     }
 }
