@@ -8,6 +8,7 @@ use PlacetoPay\MPI\Contracts\QueryResponse;
 class QueryResponseVersionTwo extends QueryResponse
 {
     private $id;
+    private $version;
     private $transStatus;
     private $eci;
     private $acsTransID;
@@ -20,6 +21,7 @@ class QueryResponseVersionTwo extends QueryResponse
     public function __construct(array $data)
     {
         $this->id = $data['id'];
+        $this->version = $data['version'] ?? MPI::VERSION_TWO;
         $this->transStatus = $data['transStatus'];
         $this->eci = $data['eci'];
         $this->acsTransID = $data['acsTransID'] ?? null;
@@ -110,7 +112,7 @@ class QueryResponseVersionTwo extends QueryResponse
 
     public function version(): string
     {
-        return MPI::VERSION_TWO;
+        return $this->version;
     }
 
     public function extra(): array
@@ -151,6 +153,7 @@ class QueryResponseVersionTwo extends QueryResponse
             'threeDSServerTransID' => $result['threeDSServerTransID'] ?? null,
             'authenticationValue' => $result['authenticationValue'] ?? null,
             'transStatusReason' => $result['transStatusReason'] ?? null,
+            'version' => self::readVersion($result['messageVersion'] ?? '2.1.0'),
         ];
 
         return new self($data);
