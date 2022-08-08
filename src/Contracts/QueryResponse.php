@@ -25,6 +25,28 @@ abstract class QueryResponse extends MPIBaseMessage
 
     abstract public function extra(): array;
 
+    abstract public function validSignature(): bool;
+
+    public function toArray(): array
+    {
+        $data = [
+            'id' => $this->id(),
+            'enrolled' => $this->enrolled(),
+            'authenticated' => $this->authenticated(),
+            'validSignature' => $this->validSignature(),
+            'eci' => $this->eci(),
+            'cavv' => $this->cavv(),
+            'xid' => $this->xid(),
+            'version' => $this->version(),
+        ];
+
+        if ($this->version() === MPI::VERSION_TWO) {
+            $data['extra'] = $this->extra();
+        }
+
+        return $data;
+    }
+
     public static function readVersion(string $version): string
     {
         if (substr($version, 0, 1) === '1') {
