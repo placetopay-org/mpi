@@ -43,7 +43,7 @@ class LookUpProcessTest extends BaseTestCase
 
     public function testItFailsIfNotURLProvided()
     {
-        $this->expectException(\PlacetoPay\MPI\Contracts\MPIException::class);
+        $this->expectException(MPIException::class);
         $this->create(['url' => null]);
     }
 
@@ -74,7 +74,7 @@ class LookUpProcessTest extends BaseTestCase
 
     public function testItValidatesTheInstallmentsCorrectly()
     {
-        $this->expectException(\PlacetoPay\MPI\Contracts\MPIException::class);
+        $this->expectException(MPIException::class);
         $mpi = $this->create();
 
         $response = $mpi->lookUp([
@@ -113,7 +113,7 @@ class LookUpProcessTest extends BaseTestCase
 
     public function testItChangesTheApiKeyOnDemandInvalid()
     {
-        $this->expectException(\PlacetoPay\MPI\Contracts\MPIException::class);
+        $this->expectException(MPIException::class);
         $mpi = $this->create();
 
         $mpi->setApiKey('INVALID_ONE');
@@ -154,7 +154,7 @@ class LookUpProcessTest extends BaseTestCase
 
     public function testItValidatesCorrectlyTheRedirectUrl()
     {
-        $this->expectException(\PlacetoPay\MPI\Contracts\MPIException::class);
+        $this->expectException(MPIException::class);
         $mpi = $this->create();
 
         $response = $mpi->lookUp([
@@ -175,7 +175,7 @@ class LookUpProcessTest extends BaseTestCase
     {
         $mpi = $this->create([
             '3dsVersion' => MPI::VERSION_TWO,
-            'client' => \PlacetoPay\MPI\Clients\MockClientVersionTwo::instance(),
+            'client' => MockClientVersionTwo::instance(),
         ]);
 
         $response = $mpi->lookUp([
@@ -200,7 +200,7 @@ class LookUpProcessTest extends BaseTestCase
     {
         $mpi = $this->create([
             '3dsVersion' => MPI::VERSION_TWO,
-            'client' => \PlacetoPay\MPI\Clients\MockClientVersionTwo::instance(),
+            'client' => MockClientVersionTwo::instance(),
         ]);
 
         $this->expectException(ErrorResultMPI::class);
@@ -220,7 +220,7 @@ class LookUpProcessTest extends BaseTestCase
     {
         $mpi = $this->create([
             '3dsVersion' => MPI::VERSION_TWO,
-            'client' => \PlacetoPay\MPI\Clients\MockClientVersionTwo::instance(),
+            'client' => MockClientVersionTwo::instance(),
         ]);
 
         $this->expectException(MPIException::class);
@@ -242,7 +242,7 @@ class LookUpProcessTest extends BaseTestCase
     {
         $mpi = $this->create([
             '3dsVersion' => MPI::VERSION_TWO,
-            'client' => \PlacetoPay\MPI\Clients\MockClientVersionTwo::instance(),
+            'client' => MockClientVersionTwo::instance(),
         ]);
 
         $this->expectException(MPIException::class);
@@ -258,5 +258,106 @@ class LookUpProcessTest extends BaseTestCase
             'threeDSAuthenticationInd' => 03,
             'recurringFrequency' => '15',
         ]);
+    }
+
+    /**
+     * @dataProvider threeDSAuthenticationIndIsNotCorrectForMastercardDataProvider
+     * AN 7792
+     */
+    public function testThrowExceptionWhenThreeDSAuthenticationIndIsNotCorrectForMastercard(array $field, string $expectedExceptionMessage): void
+    {
+        $this->expectException(MPIException::class);
+        $this->expectExceptionMessage($expectedExceptionMessage);
+
+        $mpi = $this->create([
+            '3dsVersion' => MPI::VERSION_TWO,
+            'client' => null,
+        ]);
+
+        $mpi->lookUp(array_merge([
+            'card' => [
+                'number' => '5554575520765109',
+                'expirationYear' => '20',
+                'expirationMonth' => '12',
+            ],
+            'amount' => 1500,
+            'currency' => 'COP',
+            'redirectUrl' => 'https://dnetix.co/ping/3ds',
+            'threeDSAuthenticationInd' => '01',
+            'franchise' => 'mastercard',
+        ], $field));
+    }
+
+    /**
+     * @dataProvider threeDSAuthenticationIndCorrectly
+     * AN 7792
+     */
+    public function testValidatesTheThreeDSAuthenticationIndCorrectly(array $field, string $franchise, string $threeDSAuthenticationInd, string $card): void
+    {
+        $mpi = $this->create([
+            '3dsVersion' => MPI::VERSION_TWO,
+            'client' => MockClientVersionTwo::instance(),
+        ]);
+
+        $response = $mpi->lookUp(array_merge([
+            'card' => [
+                'number' => $card,
+                'expirationYear' => '20',
+                'expirationMonth' => '12',
+            ],
+            'amount' => 1500,
+            'currency' => 'COP',
+            'redirectUrl' => 'https://dnetix.co/ping/3ds',
+            'threeDSAuthenticationInd' => $threeDSAuthenticationInd,
+            'franchise' => $franchise,
+        ], $field));
+
+        $this->assertTrue($response->canAuthenticate());
+        $this->assertEquals(12, $response->identifier());
+        $this->assertEquals('https://dnetix.co/ping/3ds', $response->processUrl());
+    }
+
+    public function threeDSAuthenticationIndCorrectly(): array
+    {
+        return [
+            'Agent payment transaction for Mastercard successful' => [
+                ['agentPaymentTransaction'=> true],
+                'mastercard',
+                '85',
+                '5554575520765116',
+            ],
+            'Payment request is for an unknown and undefined final amount for Mastercard successful' => [
+                ['preAuthorization'=> true],
+                'mastercard',
+                '86',
+                '5554575520765116',
+            ],
+            'Agent payment transaction for VISA successful' => [
+                ['agentPaymentTransaction'=> true],
+                'visa',
+                '01',
+                '4532840681197602',
+            ],
+            'Payment request is for an unknown and undefined final amount for VISA successful' => [
+                ['preAuthorization'=> true],
+                'visa',
+                '01',
+                '4532840681197602',
+            ],
+        ];
+    }
+
+    public function threeDSAuthenticationIndIsNotCorrectForMastercardDataProvider(): array
+    {
+        return [
+            'Agent Payment Transaction for Mastercard' => [
+                ['agentPaymentTransaction'=> true],
+                'The value of the threeDSAuthenticationInd field for an Agent Payment transaction must be 85 for mastercard.',
+            ],
+            'Payment request is for an unknown and undefined final amount for Mastercard' => [
+                ['preAuthorization'=> true],
+                'The value of the threeDSAuthenticationInd field for payment request is for an unknown and undefined final amount prior to the purchase transaction must be 86 for mastercard.',
+            ],
+        ];
     }
 }

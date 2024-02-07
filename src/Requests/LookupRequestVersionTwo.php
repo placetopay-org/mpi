@@ -5,6 +5,7 @@ namespace PlacetoPay\MPI\Requests;
 use PlacetoPay\MPI\Constants\MPI;
 use PlacetoPay\MPI\Contracts\MPIException;
 use PlacetoPay\MPI\Contracts\Request;
+use PlacetoPay\MPI\Requests\Fields\ThreeDSAuthenticationIndForFranchise;
 
 class LookupRequestVersionTwo implements Request
 {
@@ -69,6 +70,10 @@ class LookupRequestVersionTwo implements Request
      */
     private $additional = [];
 
+    private bool $agentPaymentTransaction = false;
+    private ?string $franchise = null;
+    private ?string $preAuthorization = null;
+
     public function __construct($data)
     {
         if (!empty($data['currency'])) {
@@ -84,6 +89,9 @@ class LookupRequestVersionTwo implements Request
         $this->cardExpiryDate = $this->expirationYearShort($data['card']['expirationYear']) . $data['card']['expirationMonth'];
         $this->redirectURI = $data['redirectUrl'];
         $this->reference = $data['reference'] ?? null;
+        $this->agentPaymentTransaction = $data['agentPaymentTransaction'] ?? false;
+        $this->franchise = $data['franchise'] ?? null;
+        $this->preAuthorization = $data['preAuthorization'] ?? null;
 
         $this->threeDSAuthValidation($data);
 
@@ -125,6 +133,9 @@ class LookupRequestVersionTwo implements Request
             'purchaseInstallData' => $this->purchaseInstallData,
             'recurringFrequency' => $this->recurringFrequency,
             'recurringExpiry' => $this->recurringExpiry,
+            'agentPaymentTransaction' => $this->agentPaymentTransaction,
+            'preAuthorization' => $this->preAuthorization,
+            'franchise' => $this->franchise,
         ], $this->additional));
     }
 
@@ -157,6 +168,8 @@ class LookupRequestVersionTwo implements Request
                 throw new MPIException("The purchase instal data field is required when three d s authentication ind is {$this->threeDSAuthenticationInd}.");
             }
         }
+
+        ThreeDSAuthenticationIndForFranchise::build($this->toArray());
     }
 
     private function loadAdditional(array $data)
