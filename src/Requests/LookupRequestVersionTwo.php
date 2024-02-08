@@ -6,6 +6,7 @@ use PlacetoPay\MPI\Constants\MPI;
 use PlacetoPay\MPI\Contracts\MPIException;
 use PlacetoPay\MPI\Contracts\Request;
 use PlacetoPay\MPI\Requests\Fields\ThreeDSAuthenticationIndForFranchise;
+use PlacetoPay\MPI\Requests\Fields\ThreeRIIndForFranchise;
 
 class LookupRequestVersionTwo implements Request
 {
@@ -94,6 +95,7 @@ class LookupRequestVersionTwo implements Request
         $this->preAuthorization = $data['preAuthorization'] ?? null;
 
         $this->threeDSAuthValidation($data);
+        $this->threeRIValidation($data);
 
         $this->purchaseInstallData = $data['purchaseInstallData'] ?? null;
         $this->recurringFrequency = $data['recurringFrequency'] ?? null;
@@ -153,7 +155,7 @@ class LookupRequestVersionTwo implements Request
      * @param $data
      * @throws MPIException
      */
-    protected function threeDSAuthValidation($data)
+    protected function threeDSAuthValidation($data): void
     {
         if (in_array($this->threeDSAuthenticationInd, MPI::THREEDS_AUTH_INDICATOR)) {
             if (!isset($data['recurringFrequency'])) {
@@ -170,6 +172,11 @@ class LookupRequestVersionTwo implements Request
         }
 
         ThreeDSAuthenticationIndForFranchise::build($this->toArray());
+    }
+
+    protected function threeRIValidation(): void
+    {
+        ThreeRIIndForFranchise::build($this->toArray());
     }
 
     private function loadAdditional(array $data)
