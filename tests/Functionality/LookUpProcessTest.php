@@ -261,6 +261,36 @@ class LookUpProcessTest extends BaseTestCase
     }
 
     /**
+     * @dataProvider threeRIIndIsNotCorrectForMastercardDataProvider
+     * AN 7792
+     */
+    public function testThrowExceptionWhenThreeRIIndIsNotCorrectForMastercard(array $field, string $expectedExceptionMessage): void
+    {
+        $this->expectException(MPIException::class);
+        $this->expectExceptionMessage($expectedExceptionMessage);
+
+        $mpi = $this->create([
+            '3dsVersion' => MPI::VERSION_TWO,
+            'client' => null,
+        ]);
+
+        $mpi->lookUp(array_merge([
+            'card' => [
+                'number' => '5554575520765109',
+                'expirationYear' => '20',
+                'expirationMonth' => '12',
+            ],
+            'amount' => 1500,
+            'currency' => 'COP',
+            'redirectUrl' => 'https://dnetix.co/ping/3ds',
+            'threeRIInd' => '01',
+            'recurringFrequency' => '31',
+            'recurringExpiry' => '20250301',
+            'franchise' => 'mastercard',
+        ], $field));
+    }
+
+    /**
      * @dataProvider threeDSAuthenticationIndIsNotCorrectForMastercardDataProvider
      * AN 7792
      */
@@ -289,7 +319,7 @@ class LookUpProcessTest extends BaseTestCase
     }
 
     /**
-     * @dataProvider threeDSAuthenticationIndCorrectly
+     * @dataProvider threeDSAuthenticationIndOrThreeRIIndCorrectly
      * AN 7792
      */
     public function testValidatesTheThreeDSAuthenticationIndCorrectly(array $field, string $franchise, string $threeDSAuthenticationInd, string $card): void
@@ -317,7 +347,38 @@ class LookUpProcessTest extends BaseTestCase
         $this->assertEquals('https://dnetix.co/ping/3ds', $response->processUrl());
     }
 
-    public function threeDSAuthenticationIndCorrectly(): array
+    /**
+     * @dataProvider threeDSAuthenticationIndOrThreeRIIndCorrectly
+     * AN 7792
+     */
+    public function testValidatesTheThreeRIIndCorrectly(array $field, string $franchise, string $threeRIInd, string $card): void
+    {
+        $mpi = $this->create([
+            '3dsVersion' => MPI::VERSION_TWO,
+            'client' => MockClientVersionTwo::instance(),
+        ]);
+
+        $response = $mpi->lookUp(array_merge([
+            'card' => [
+                'number' => $card,
+                'expirationYear' => '20',
+                'expirationMonth' => '12',
+            ],
+            'amount' => 1500,
+            'currency' => 'COP',
+            'redirectUrl' => 'https://dnetix.co/ping/3ds',
+            'threeRIInd' => $threeRIInd,
+            'recurringFrequency' => '31',
+            'recurringExpiry' => '20250301',
+            'franchise' => $franchise,
+        ], $field));
+
+        $this->assertTrue($response->canAuthenticate());
+        $this->assertEquals(12, $response->identifier());
+        $this->assertEquals('https://dnetix.co/ping/3ds', $response->processUrl());
+    }
+
+    public function threeDSAuthenticationIndOrThreeRIIndCorrectly(): array
     {
         return [
             'Agent payment transaction for Mastercard successful' => [
@@ -357,6 +418,20 @@ class LookUpProcessTest extends BaseTestCase
             'Payment request is for an unknown and undefined final amount for Mastercard' => [
                 ['preAuthorization'=> true],
                 'The value of the threeDSAuthenticationInd field for payment request is for an unknown and undefined final amount prior to the purchase transaction must be 86 for mastercard.',
+            ],
+        ];
+    }
+
+    public function threeRIIndIsNotCorrectForMastercardDataProvider(): array
+    {
+        return [
+            '3RI Agent Payment Transaction for Mastercard' => [
+                ['agentPaymentTransaction'=> true],
+                'The value of the threeRIInd field for an 3RI Agent Payment transaction must be 85 for mastercard.',
+            ],
+            '3RI Payment request is for an unknown and undefined final amount for Mastercard' => [
+                ['preAuthorization'=> true],
+                'The value of the threeRIInd field for 3RI payment request is for an unknown and undefined final amount prior to the purchase transaction must be 86 for mastercard.',
             ],
         ];
     }

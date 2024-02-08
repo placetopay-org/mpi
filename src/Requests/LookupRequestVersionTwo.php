@@ -73,7 +73,8 @@ class LookupRequestVersionTwo implements Request
 
     private bool $agentPaymentTransaction = false;
     private ?string $franchise = null;
-    private ?string $preAuthorization = null;
+    private bool $preAuthorization = false;
+    private ?string $threeRIInd;
 
     public function __construct($data)
     {
@@ -91,15 +92,16 @@ class LookupRequestVersionTwo implements Request
         $this->redirectURI = $data['redirectUrl'];
         $this->reference = $data['reference'] ?? null;
         $this->agentPaymentTransaction = $data['agentPaymentTransaction'] ?? false;
+        $this->preAuthorization = $data['preAuthorization'] ?? false;
         $this->franchise = $data['franchise'] ?? null;
-        $this->preAuthorization = $data['preAuthorization'] ?? null;
-
-        $this->threeDSAuthValidation($data);
-        $this->threeRIValidation($data);
+        $this->threeRIInd = $data['threeRIInd'] ?? null;
 
         $this->purchaseInstallData = $data['purchaseInstallData'] ?? null;
         $this->recurringFrequency = $data['recurringFrequency'] ?? null;
         $this->recurringExpiry = $data['recurringExpiry'] ?? null;
+
+        $this->threeDSAuthValidation($data);
+        $this->threeRIValidation();
 
         $this->loadAdditional($data);
     }
@@ -135,6 +137,7 @@ class LookupRequestVersionTwo implements Request
             'purchaseInstallData' => $this->purchaseInstallData,
             'recurringFrequency' => $this->recurringFrequency,
             'recurringExpiry' => $this->recurringExpiry,
+            'threeRIInd' => $this->threeRIInd,
             'agentPaymentTransaction' => $this->agentPaymentTransaction,
             'preAuthorization' => $this->preAuthorization,
             'franchise' => $this->franchise,
