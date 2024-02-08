@@ -17,7 +17,6 @@ class ThreeRIIndForFranchise
 
     public static function build(array $data): void
     {
-        dd(self::isPaymentRequestForAgentPayment($data), self::isPaymentUnknownOrUndefinedFinalAmount($data));
         if (self::isPaymentRequestForAgentPayment($data)
             && isset($data['threeRIInd'])
             && $data['threeRIInd'] !== self::BRAND[$data['franchise']]['3RI_PAYMENT_REQUEST_IS_FOR_AGENT_PAYMENT']
