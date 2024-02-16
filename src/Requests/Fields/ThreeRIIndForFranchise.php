@@ -19,18 +19,22 @@ class ThreeRIIndForFranchise
     public static function build(array $data): void
     {
         if (self::isPaymentRequestForAgentPayment($data)
-            && isset($data['threeRIInd'])
-            && $data['threeRIInd'] !== self::BRAND[$data['franchise']]['3RI_PAYMENT_REQUEST_IS_FOR_AGENT_PAYMENT']
+            && self::validateIndicator($data, '3RI_PAYMENT_REQUEST_IS_FOR_AGENT_PAYMENT')
         ) {
             throw new MPIException('The value of the threeRIInd field for an 3RI Agent Payment transaction must be 85 for mastercard.');
         }
 
         if (self::isPaymentUnknownOrUndefinedFinalAmount($data)
-            && isset($data['threeRIInd'])
-            && $data['threeRIInd'] !== self::BRAND[$data['franchise']]['3RI_UNKNOWN_OR_UNDEFINED_FINAL_AMOUNT']
+            && self::validateIndicator($data, '3RI_UNKNOWN_OR_UNDEFINED_FINAL_AMOUNT')
         ) {
             throw new MPIException('The value of the threeRIInd field for 3RI payment request is for an unknown and undefined final amount prior to the purchase transaction must be 86 for mastercard.');
         }
+    }
+
+    private static function validateIndicator(array $data, string $type): bool
+    {
+        return isset($data['threeRIInd'])
+            && $data['threeRIInd'] !== self::BRAND[$data['franchise']][$type];
     }
 
     protected static function getBrand(): array
