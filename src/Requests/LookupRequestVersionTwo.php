@@ -5,6 +5,8 @@ namespace PlacetoPay\MPI\Requests;
 use PlacetoPay\MPI\Constants\MPI;
 use PlacetoPay\MPI\Contracts\MPIException;
 use PlacetoPay\MPI\Contracts\Request;
+use PlacetoPay\MPI\Requests\Fields\ThreeDSAuthenticationIndForFranchise;
+use PlacetoPay\MPI\Requests\Fields\ThreeRIIndForFranchise;
 
 class LookupRequestVersionTwo implements Request
 {
@@ -69,6 +71,11 @@ class LookupRequestVersionTwo implements Request
      */
     private $additional = [];
 
+    private bool $agentPaymentTransaction = false;
+    private ?string $franchise = null;
+    private bool $preAuthorization = false;
+    private ?string $threeRIInd;
+
     public function __construct($data)
     {
         if (!empty($data['currency'])) {
@@ -84,12 +91,17 @@ class LookupRequestVersionTwo implements Request
         $this->cardExpiryDate = $this->expirationYearShort($data['card']['expirationYear']) . $data['card']['expirationMonth'];
         $this->redirectURI = $data['redirectUrl'];
         $this->reference = $data['reference'] ?? null;
-
-        $this->threeDSAuthValidation($data);
+        $this->agentPaymentTransaction = $data['agentPaymentTransaction'] ?? false;
+        $this->preAuthorization = $data['preAuthorization'] ?? false;
+        $this->franchise = $data['franchise'] ?? null;
+        $this->threeRIInd = $data['threeRIInd'] ?? null;
 
         $this->purchaseInstallData = $data['purchaseInstallData'] ?? null;
         $this->recurringFrequency = $data['recurringFrequency'] ?? null;
         $this->recurringExpiry = $data['recurringExpiry'] ?? null;
+
+        $this->threeDSAuthValidation($data);
+        $this->threeRIValidation();
 
         $this->loadAdditional($data);
     }
@@ -125,6 +137,10 @@ class LookupRequestVersionTwo implements Request
             'purchaseInstallData' => $this->purchaseInstallData,
             'recurringFrequency' => $this->recurringFrequency,
             'recurringExpiry' => $this->recurringExpiry,
+            'threeRIInd' => $this->threeRIInd,
+            'agentPaymentTransaction' => $this->agentPaymentTransaction,
+            'preAuthorization' => $this->preAuthorization,
+            'franchise' => $this->franchise,
         ], $this->additional));
     }
 
@@ -142,7 +158,7 @@ class LookupRequestVersionTwo implements Request
      * @param $data
      * @throws MPIException
      */
-    protected function threeDSAuthValidation($data)
+    protected function threeDSAuthValidation($data): void
     {
         if (in_array($this->threeDSAuthenticationInd, MPI::THREEDS_AUTH_INDICATOR)) {
             if (!isset($data['recurringFrequency'])) {
@@ -157,6 +173,13 @@ class LookupRequestVersionTwo implements Request
                 throw new MPIException("The purchase instal data field is required when three d s authentication ind is {$this->threeDSAuthenticationInd}.");
             }
         }
+
+        ThreeDSAuthenticationIndForFranchise::build($this->toArray());
+    }
+
+    protected function threeRIValidation(): void
+    {
+        ThreeRIIndForFranchise::build($this->toArray());
     }
 
     private function loadAdditional(array $data)
